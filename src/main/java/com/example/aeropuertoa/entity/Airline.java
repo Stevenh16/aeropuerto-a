@@ -1,4 +1,4 @@
-package com.example.aeropuertoa.model;
+package com.example.aeropuertoa.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
