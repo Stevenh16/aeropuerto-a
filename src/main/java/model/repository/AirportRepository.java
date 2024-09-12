@@ -1,6 +1,6 @@
-package com.example.aeropuertoa.repository;
+package model.repository;
 
-import com.example.aeropuertoa.entity.Airport;
+import model.entity.Airport;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AirportRepository extends JpaRepository<Airport, Long> {

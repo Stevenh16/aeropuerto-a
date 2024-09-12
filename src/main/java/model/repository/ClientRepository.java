@@ -1,6 +1,6 @@
-package com.example.aeropuertoa.repository;
+package model.repository;
 
-import com.example.aeropuertoa.entity.Client;
+import model.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
