@@ -10,5 +10,5 @@ public interface FlightServices {
     Optional<Flight> findFlightById(int id);
     Optional<Flight> updateFlight(int id, Flight flight);
     List<Flight> findAllFlights();
-    void deleteFlight(Flight flight);
+    void deleteFlightById(int id);
 }

@@ -1,5 +1,6 @@
 package model.service;
 
+import model.entity.Airline;
 import model.entity.Client;
 
 import java.util.List;
