@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import model.entity.Client;
 import model.repository.ClientRepository;
 import model.service.ClientServices;
+import org.springframework.data.domain.Example;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,14 @@ public class ClientServiceImpl implements ClientServices {
     @Override
     public List<Client> findAllClients() {
         return clientRepository.findAll();
+    }
+
+    @Override
+    public List<Client> findByName(String name) {
+        Client c = new Client();
+        c.setName(name);
+        Example<Client> example = Example.of(c);
+        return clientRepository.findAll(example);
     }
 
     @Override

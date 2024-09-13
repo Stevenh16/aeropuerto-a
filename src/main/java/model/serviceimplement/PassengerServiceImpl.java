@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import model.entity.Passenger;
 import model.repository.PassengerRepository;
 import model.service.PassengerServices;
+import org.springframework.data.domain.Example;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,14 @@ public class PassengerServiceImpl implements PassengerServices {
     @Override
     public List<Passenger> getAllPassengers() {
         return passengerRepository.findAll();
+    }
+
+    @Override
+    public List<Passenger> findByName(String name) {
+        Passenger p = new Passenger();
+        p.setName(name);
+        Example<Passenger> example = Example.of(p);
+        return passengerRepository.findAll(example);
     }
 
     @Override

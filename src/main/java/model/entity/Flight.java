@@ -6,7 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.List;
 
 @Builder
@@ -30,11 +31,11 @@ public class Flight {
     @JoinColumn(name = "airport_destination_id")
     private Airport airport_destination;
     @Column(name="exit_date")
-    private LocalDateTime exitDate;
+    private LocalDate exitDate;
     @Column(name="exit_time")
-    private LocalDateTime exitTime;
+    private Time exitTime;
     @Column(name="duration")
-    private LocalDateTime duration;
+    private Time duration;
     @Column(name="capacity")
     private int capacity;
     @ManyToMany(mappedBy = "flights")

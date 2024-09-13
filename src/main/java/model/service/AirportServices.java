@@ -11,5 +11,6 @@ public interface AirportServices {
     Optional<Airport> findAirportById(int id);
     Optional<Airport> updateAirport(int id, Airport airport);
     List<Airport> getAllAirports();
+    List<Airport> findByName(String name);
     void deleteAirport(int id);
 }

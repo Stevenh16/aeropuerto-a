@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import model.entity.Airline;
 import model.repository.AirlineRepository;
 import model.service.AirlineServices;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +40,16 @@ public class AirlineServiceImpl implements AirlineServices {
     }
 
     @Override
+    public List<Airline> findByName(String name) {
+        Airline a = new Airline();
+        a.setName(name);
+        Example<Airline> example = Example.of(a);
+        return airlineRepository.findAll(example);
+    }
+
+    @Override
     public void deleteById(int id) {
         airlineRepository.deleteById(id);
     }
+
 }

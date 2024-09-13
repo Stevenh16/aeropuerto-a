@@ -1,10 +1,13 @@
 package model.serviceimplement;
 
 import lombok.AllArgsConstructor;
+import model.entity.Client;
 import model.entity.Reserve;
 import model.repository.ReserveRepository;
 import model.service.ReserveServices;
+import org.springframework.data.domain.Example;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +42,25 @@ public class ReserveServiceImpl implements ReserveServices {
     }
 
     @Override
+    public List<Reserve> findByClient(Client client) {
+        Reserve r = new Reserve();
+        r.setClient(client);
+        Example<Reserve> example = Example.of(r);
+        return reserveRepository.findAll(example);
+    }
+
+    @Override
+    public List<Reserve> findByDate(LocalDate date) {
+        Reserve r = new Reserve();
+        r.setDate(date);
+        Example<Reserve> example = Example.of(r);
+        return reserveRepository.findAll(example);
+    }
+
+    @Override
     public void deleteReserve(int id) {
         reserveRepository.deleteById(id);
     }
+
+
 }

@@ -10,5 +10,6 @@ public interface PassengerServices {
     Optional<Passenger> getPassengerById(int id);
     Optional<Passenger> updatePassenger(int id, Passenger passenger);
     List<Passenger> getAllPassengers();
+    List<Passenger> findByName(String name);
     void deletePassenger(int id);
 }

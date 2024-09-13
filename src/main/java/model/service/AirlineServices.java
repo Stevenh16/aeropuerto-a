@@ -10,5 +10,6 @@ public interface AirlineServices {
     Optional<Airline> findAirlineById(int id);
     Optional<Airline> updateAirline(int id, Airline airline);
     List<Airline> findAll();
+    List<Airline> findByName(String name);
     void deleteById(int id);
 }

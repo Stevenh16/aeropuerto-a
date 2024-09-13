@@ -11,5 +11,6 @@ public interface ClientServices {
     Optional<Client> findClientById(int id);
     Optional<Client> updateClient(int id, Client client);
     List<Client> findAllClients();
+    List<Client> findByName(String name);
     void deleteClientById(int id);
 }

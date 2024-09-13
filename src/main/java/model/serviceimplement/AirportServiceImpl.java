@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import model.entity.Airport;
 import model.repository.AirportRepository;
 import model.service.AirportServices;
+import org.springframework.data.domain.Example;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +40,16 @@ public class AirportServiceImpl implements AirportServices {
     }
 
     @Override
+    public List<Airport> findByName(String name) {
+        Airport a = new Airport();
+        a.setName(name);
+        Example<Airport> example = Example.of(a);
+        return airportRepository.findAll(example);
+    }
+
+    @Override
     public void deleteAirport(int id) {
         airportRepository.deleteById((long)id);
     }
+
 }

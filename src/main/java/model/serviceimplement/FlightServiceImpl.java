@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import model.entity.Flight;
 import model.repository.FlightRepository;
 import model.service.FlightServices;
+import org.springframework.data.domain.Example;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +39,16 @@ public class FlightServiceImpl implements FlightServices {
     }
 
     @Override
-    public List<Flight> findAllFlights() {
+    public List<Flight> findAll() {
         return flightRepository.findAll();
+    }
+
+    @Override
+    public List<Flight> findByDate(LocalDate date) {
+        Flight f = new Flight();
+        f.setExitDate(date);
+        Example<Flight> example = Example.of(f);
+        return flightRepository.findAll(example);
     }
 
     @Override
