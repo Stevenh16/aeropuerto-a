@@ -1,10 +1,12 @@
 package model.service;
 
 import model.entity.Airline;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public interface AirlineServices {
     Airline saveAirline(Airline airline);
     Optional<Airline> findAirlineById(int id);
