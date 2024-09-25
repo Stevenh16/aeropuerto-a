@@ -5,10 +5,12 @@ import model.entity.Passenger;
 import model.repository.PassengerRepository;
 import model.service.PassengerServices;
 import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @AllArgsConstructor
 public class PassengerServiceImpl implements PassengerServices {
     PassengerRepository passengerRepository;

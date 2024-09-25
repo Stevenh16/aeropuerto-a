@@ -6,11 +6,13 @@ import model.entity.Reserve;
 import model.repository.ReserveRepository;
 import model.service.ReserveServices;
 import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @AllArgsConstructor
 public class ReserveServiceImpl implements ReserveServices {
     ReserveRepository reserveRepository;

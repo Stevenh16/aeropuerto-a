@@ -5,11 +5,13 @@ import model.entity.Flight;
 import model.repository.FlightRepository;
 import model.service.FlightServices;
 import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @AllArgsConstructor
 public class FlightServiceImpl implements FlightServices {
     FlightRepository flightRepository;

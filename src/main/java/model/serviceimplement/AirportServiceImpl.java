@@ -5,10 +5,12 @@ import model.entity.Airport;
 import model.repository.AirportRepository;
 import model.service.AirportServices;
 import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @AllArgsConstructor
 public class AirportServiceImpl implements AirportServices {
     private AirportRepository airportRepository;

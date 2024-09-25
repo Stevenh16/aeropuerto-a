@@ -5,10 +5,12 @@ import model.entity.Client;
 import model.repository.ClientRepository;
 import model.service.ClientServices;
 import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @AllArgsConstructor
 public class ClientServiceImpl implements ClientServices {
     private ClientRepository clientRepository;
