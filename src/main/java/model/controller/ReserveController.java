@@ -18,7 +18,7 @@ public class ReserveController {
         this.reserveServices = reserveServices;
     }
     @GetMapping
-    public ResponseEntity<List<Reserve>> getAllReserves() {
+    public ResponseEntity<List<Reserve>> getReserves() {
         return ResponseEntity.ok(reserveServices.findAllReserves());
     }
     @GetMapping("/{id}")
