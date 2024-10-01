@@ -1,7 +1,11 @@
 package model.serviceimplement;
 
 import lombok.AllArgsConstructor;
+import model.dto.ClientDto;
+import model.dto.ClientIdDto;
 import model.entity.Client;
+import model.mapper.ClientMapper;
+import model.mapper.ReserveMapper;
 import model.repository.ClientRepository;
 import model.service.ClientServices;
 import org.springframework.data.domain.Example;
@@ -13,45 +17,48 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class ClientServiceImpl implements ClientServices {
+    private final ClientMapper clientMapper;
+    private final ReserveMapper reserveMapper;
     private ClientRepository clientRepository;
 
     @Override
-    public Client saveClient(Client client) {
-        return clientRepository.save(client);
+    public ClientIdDto save(ClientDto client) {
+        return clientMapper.toIdDto(clientRepository.save(clientMapper.toEntity(client)));
     }
 
     @Override
-    public Optional<Client> findClientById(int id) {
-        return clientRepository.findById(id);
+    public Optional<ClientIdDto> findById(int id) {
+        return Optional.of(clientMapper.toIdDto(clientRepository.findById(id).get()));
     }
 
     @Override
-    public Optional<Client> updateClient(int id, Client client) {
-        Client c = clientRepository.findById(id).get();
-        c.setAddress(client.getAddress());
-        c.setName(client.getName());
-        c.setCellphone(client.getCellphone());
-        c.setEmail(client.getEmail());
-        c.setLastname(client.getLastname());
-        c.setReserves(client.getReserves());
-        return Optional.of(clientRepository.save(c));
+    public Optional<ClientIdDto> update(int id, ClientDto client) {
+        return Optional.of(clientMapper.toIdDto(clientRepository.findById(id).map(oldClient -> {
+            oldClient.setAddress(client.address());
+            oldClient.setName(client.name());
+            oldClient.setLastname(client.lastname());
+            oldClient.setEmail(client.email());
+            oldClient.setCellphone(client.cellphone());
+            oldClient.setReserves(reserveMapper.toEntities(client.reserves()));
+            return clientRepository.save(oldClient);
+        }).get()));
     }
 
     @Override
-    public List<Client> findAllClients() {
-        return clientRepository.findAll();
+    public List<ClientIdDto> findAll() {
+        return clientMapper.toIdDtos(clientRepository.findAll());
     }
 
     @Override
-    public List<Client> findByName(String name) {
+    public List<ClientIdDto> findByName(String name) {
         Client c = new Client();
         c.setName(name);
         Example<Client> example = Example.of(c);
-        return clientRepository.findAll(example);
+        return clientMapper.toIdDtos(clientRepository.findAll(example));
     }
 
     @Override
-    public void deleteClientById(int id) {
+    public void deleteById(int id) {
         clientRepository.deleteById(id);
     }
 }

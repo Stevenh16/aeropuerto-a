@@ -1,7 +1,11 @@
 package model.serviceimplement;
 
 import lombok.AllArgsConstructor;
+import model.dto.AirportDto;
+import model.dto.AirportIdDto;
 import model.entity.Airport;
+import model.mapper.AirportMapper;
+import model.mapper.FlightMapper;
 import model.repository.AirportRepository;
 import model.service.AirportServices;
 import org.springframework.data.domain.Example;
@@ -13,44 +17,47 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class AirportServiceImpl implements AirportServices {
+    private final AirportMapper airportMapper;
+    private final FlightMapper flightMapper;
     private AirportRepository airportRepository;
 
     @Override
-    public Airport saveAirport(Airport airport) {
-        return airportRepository.save(airport);
+    public AirportIdDto save(AirportDto airport) {
+        return airportMapper.toIdDto(airportRepository.save(airportMapper.toEntity(airport)));
     }
 
     @Override
-    public Optional<Airport> findAirportById(int id) {
-        return airportRepository.findById((long)id);
+    public Optional<AirportIdDto> findById(int id) {
+        return Optional.of(airportMapper.toIdDto(airportRepository.findById((long) id).get()));
     }
 
     @Override
-    public Optional<Airport> updateAirport(int id, Airport airport) {
-        Airport a = airportRepository.findById((long)id).get();
-        a.setCity(airport.getCity());
-        a.setName(airport.getName());
-        a.setCountry(airport.getCountry());
-        a.setFlightsOrigins(airport.getFlightsOrigins());
-        a.setFlightsDestinations(airport.getFlightsDestinations());
-        return Optional.of(airportRepository.save(a));
+    public Optional<AirportIdDto> update(int id, AirportDto airport) {
+        return Optional.of(airportMapper.toIdDto( airportRepository.findById((long) id).map(oldAirport -> {
+            oldAirport.setCity(airport.city());
+            oldAirport.setCountry(airport.country());
+            oldAirport.setName(airport.name());
+            oldAirport.setFlightsOrigins(flightMapper.toEntities(airport.flightsOrigins()));
+            oldAirport.setFlightsDestinations(flightMapper.toEntities(airport.flightsDestinations()));
+            return airportRepository.save(oldAirport);
+        }).get()));
     }
 
     @Override
-    public List<Airport> getAllAirports() {
-        return airportRepository.findAll();
+    public List<AirportIdDto> findAll() {
+        return airportMapper.toIdDtos(airportRepository.findAll());
     }
 
     @Override
-    public List<Airport> findByName(String name) {
+    public List<AirportIdDto> findByName(String name) {
         Airport a = new Airport();
         a.setName(name);
         Example<Airport> example = Example.of(a);
-        return airportRepository.findAll(example);
+        return airportMapper.toIdDtos(airportRepository.findAll(example));
     }
 
     @Override
-    public void deleteAirport(int id) {
+    public void deleteById(int id) {
         airportRepository.deleteById((long)id);
     }
 

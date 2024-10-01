@@ -1,7 +1,11 @@
 package model.serviceimplement;
 
 import lombok.AllArgsConstructor;
+import model.dto.AirlineDto;
+import model.dto.AirlineIdDto;
 import model.entity.Airline;
+import model.mapper.AirlineMapper;
+import model.mapper.FlightMapper;
 import model.repository.AirlineRepository;
 import model.service.AirlineServices;
 import org.springframework.data.domain.Example;
@@ -14,38 +18,41 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AirlineServiceImpl implements AirlineServices {
     private AirlineRepository airlineRepository;
+    private FlightMapper flightMapper;
+    private AirlineMapper airlineMapper;
 
     @Override
-    public Airline saveAirline(Airline airline) {
-        return airlineRepository.save(airline);
+    public AirlineIdDto save(AirlineDto airline) {
+        return airlineMapper.toIdDto(airlineRepository.save(airlineMapper.toEntity(airline)));
     }
 
     @Override
-    public Optional<Airline> findAirlineById(int id) {
-        return airlineRepository.findById(id);
+    public Optional<AirlineIdDto> findById(int id) {
+        return Optional.of(airlineMapper.toIdDto(airlineRepository.findById(id).get()));
     }
 
     @Override
-    public Optional<Airline> updateAirline(int id, Airline airline) {
-        Airline a = airlineRepository.findById(id).get();
-        a.setName(airline.getName());
-        a.setAirlineCode(airline.getAirlineCode());
-        a.setFlights(airline.getFlights());
-        a.setCountryOfOrigin(airline.getCountryOfOrigin());
-        return Optional.of(airlineRepository.save(a));
+    public Optional<AirlineIdDto> update(int id, AirlineDto airline) {
+        return Optional.of(airlineMapper.toIdDto( airlineRepository.findById(id).map(oldAirline -> {
+            oldAirline.setAirlineCode(airline.airlineCode());
+            oldAirline.setName(airline.name());
+            oldAirline.setCountryOfOrigin(airline.countryOfOrigin());
+            oldAirline.setFlights(flightMapper.toEntities(airline.flights()));//Preguntar!!! Los Flights a asignar no tendran los mismos ids que los originales, o eso creo.
+            return airlineRepository.save(oldAirline);
+        }).get() ));
     }
 
     @Override
-    public List<Airline> findAll() {
-        return airlineRepository.findAll();
+    public List<AirlineIdDto> findAll() {
+        return airlineMapper.toIdDtos(airlineRepository.findAll());
     }
 
     @Override
-    public List<Airline> findByName(String name) {
+    public List<AirlineIdDto> findByName(String name) {
         Airline a = new Airline();
         a.setName(name);
         Example<Airline> example = Example.of(a);
-        return airlineRepository.findAll(example);
+        return airlineMapper.toIdDtos(airlineRepository.findAll(example));
     }
 
     @Override

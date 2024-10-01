@@ -1,7 +1,11 @@
 package model.serviceimplement;
 
 import lombok.AllArgsConstructor;
+import model.dto.PassengerDto;
+import model.dto.PassengerIdDto;
 import model.entity.Passenger;
+import model.mapper.PassengerMapper;
+import model.mapper.ReserveMapper;
 import model.repository.PassengerRepository;
 import model.service.PassengerServices;
 import org.springframework.data.domain.Example;
@@ -13,45 +17,48 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class PassengerServiceImpl implements PassengerServices {
+    private final PassengerMapper passengerMapper;
+    private final ReserveMapper reserveMapper;
     PassengerRepository passengerRepository;
 
     @Override
-    public Passenger savePassenger(Passenger passenger) {
-        return passengerRepository.save(passenger);
+    public PassengerIdDto save(PassengerDto passenger) {
+        return passengerMapper.toIdDto(passengerRepository.save(passengerMapper.toEntity(passenger)));
     }
 
     @Override
-    public Optional<Passenger> getPassengerById(int id) {
-        return passengerRepository.findById(id);
+    public Optional<PassengerIdDto> getById(int id) {
+        return Optional.of(passengerMapper.toIdDto(passengerRepository.findById(id).get()));
     }
 
     @Override
-    public Optional<Passenger> updatePassenger(int id, Passenger passenger) {
-        Passenger p = passengerRepository.findById(id).get();
-        p.setAddress(passenger.getAddress());
-        p.setName(passenger.getName());
-        p.setCellphone(passenger.getCellphone());
-        p.setEmail(passenger.getEmail());
-        p.setLastname(passenger.getLastname());
-        p.setReserve(passenger.getReserve());
-        return Optional.of(passengerRepository.save(p));
+    public Optional<PassengerIdDto> update(int id, PassengerDto passenger) {
+        return Optional.of(passengerMapper.toIdDto(passengerRepository.findById(id).map(oldPassenger ->{
+            oldPassenger.setName(passenger.name());
+            oldPassenger.setLastname(passenger.lastname());
+            oldPassenger.setAddress(passenger.address());
+            oldPassenger.setCellphone(passenger.cellphone());
+            oldPassenger.setEmail(passenger.email());
+            oldPassenger.setReserve(reserveMapper.toEntity(passenger.reserve()));
+            return passengerRepository.save(oldPassenger);
+        }).get()));
     }
 
     @Override
-    public List<Passenger> getAllPassengers() {
-        return passengerRepository.findAll();
+    public List<PassengerIdDto> findAll() {
+        return passengerMapper.toIdDtos(passengerRepository.findAll());
     }
 
     @Override
-    public List<Passenger> findByName(String name) {
+    public List<PassengerIdDto> findByName(String name) {
         Passenger p = new Passenger();
         p.setName(name);
         Example<Passenger> example = Example.of(p);
-        return passengerRepository.findAll(example);
+        return passengerMapper.toIdDtos(passengerRepository.findAll(example));
     }
 
     @Override
-    public void deletePassenger(int id) {
+    public void deleteById(int id) {
         passengerRepository.deleteById(id);
     }
 }
