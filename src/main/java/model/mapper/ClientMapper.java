@@ -2,6 +2,7 @@ package model.mapper;
 
 import lombok.AllArgsConstructor;
 import model.dto.ClientDto;
+import model.dto.ClientIdDto;
 import model.entity.Client;
 import org.springframework.stereotype.Component;
 
@@ -38,5 +39,15 @@ public class ClientMapper {
             dtos.add(toDto(client));
         }
         return dtos;
+    }
+    public ClientIdDto toIdDto(Client client) {
+        return new ClientIdDto(client.getId(), client.getName(), client.getLastname(), client.getAddress(), client.getCellphone(), client.getEmail(),reserveMapper.toIdDtos(client.getReserves()));
+    }
+    public List<ClientIdDto> toIdDtos(List<Client> clients) {
+        List<ClientIdDto> idDtos = new ArrayList<>();
+        for (Client client : clients) {
+            idDtos.add(toIdDto(client));
+        }
+        return idDtos;
     }
 }

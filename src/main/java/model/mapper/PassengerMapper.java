@@ -2,6 +2,7 @@ package model.mapper;
 
 import lombok.AllArgsConstructor;
 import model.dto.PassengerDto;
+import model.dto.PassengerIdDto;
 import model.entity.Passenger;
 import org.springframework.stereotype.Component;
 
@@ -38,5 +39,15 @@ public class PassengerMapper {
             passengerDtos.add(toDto(passenger));
         }
         return passengerDtos;
+    }
+    public PassengerIdDto toIdDto(Passenger passenger){
+        return new PassengerIdDto(passenger.getId(), passenger.getName(), passenger.getLastname(), passenger.getAddress(), passenger.getCellphone(), passenger.getEmail(), reserveMapper.toIdDto(passenger.getReserve()));
+    }
+    public List<PassengerIdDto> toIdDtos(List<Passenger> passengers) {
+        List<PassengerIdDto> passengerIdDtos = new ArrayList<>();
+        for (Passenger passenger : passengers) {
+            passengerIdDtos.add(toIdDto(passenger));
+        }
+        return passengerIdDtos;
     }
 }

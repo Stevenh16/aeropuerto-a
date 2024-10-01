@@ -2,6 +2,7 @@ package model.mapper;
 
 import lombok.AllArgsConstructor;
 import model.dto.ReserveDto;
+import model.dto.ReserveIdDto;
 import model.entity.Reserve;
 import org.springframework.stereotype.Component;
 
@@ -40,5 +41,15 @@ public class ReserveMapper {
             reserveDtoList.add(toDto(reserve));
         }
         return reserveDtoList;
+    }
+    public ReserveIdDto toIdDto(Reserve reserve){
+        return new ReserveIdDto(reserve.getId(), reserve.getDate(), reserve.getNumbersOfPassengers(), clientMapper.toIdDto(reserve.getClient()), passengerMapper.toIdDtos(reserve.getPassengers()), flightMapper.toIdDtos(reserve.getFlights()));
+    }
+    public List<ReserveIdDto> toIdDtos(List<Reserve> reserveList){
+        List<ReserveIdDto> reserveIdDtoList = new ArrayList<>();
+        for(Reserve reserve : reserveList){
+            reserveIdDtoList.add(toIdDto(reserve));
+        }
+        return reserveIdDtoList;
     }
 }

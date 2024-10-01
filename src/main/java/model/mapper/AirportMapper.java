@@ -2,6 +2,7 @@ package model.mapper;
 
 import lombok.AllArgsConstructor;
 import model.dto.AirportDto;
+import model.dto.AirportIdDto;
 import model.entity.Airport;
 import org.springframework.stereotype.Component;
 
@@ -37,5 +38,15 @@ public class AirportMapper {
             airportDtos.add(toDto(airport));
         }
         return airportDtos;
+    }
+    public AirportIdDto toIdDto(Airport airport) {
+        return new AirportIdDto(airport.getId(), airport.getName(), airport.getCity(), airport.getCountry(),flightMapper.toIdDtos(airport.getFlightsOrigins()),flightMapper.toIdDtos(airport.getFlightsDestinations()));
+    }
+    public List<AirportIdDto> toIdDtos(List<Airport> airports) {
+        List<AirportIdDto> airportIdDtos = new ArrayList<>();
+        for (Airport airport : airports) {
+            airportIdDtos.add(toIdDto(airport));
+        }
+        return airportIdDtos;
     }
 }
