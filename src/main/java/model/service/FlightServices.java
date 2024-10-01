@@ -1,5 +1,7 @@
 package model.service;
 
+import model.dto.FlightDto;
+import model.dto.FlightIdDto;
 import model.entity.Flight;
 
 import java.time.LocalDate;
@@ -7,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FlightServices {
-    Flight saveFlight(Flight flight);
-    Optional<Flight> findFlightById(int id);
-    Optional<Flight> updateFlight(int id, Flight flight);
-    List<Flight> findAll();
-    List<Flight> findByDate(LocalDate date);
-    void deleteFlightById(int id);
+    FlightIdDto save(FlightDto flight);
+    Optional<FlightIdDto> findById(int id);
+    Optional<FlightIdDto> update(int id, FlightDto flight);
+    List<FlightIdDto> findAll();
+    List<FlightIdDto> findByDate(LocalDate date);
+    void deleteById(int id);
 }

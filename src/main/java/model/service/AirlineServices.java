@@ -1,15 +1,16 @@
 package model.service;
 
-import model.entity.Airline;
+import model.dto.AirlineDto;
+import model.dto.AirlineIdDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AirlineServices {
-    Airline saveAirline(Airline airline);
-    Optional<Airline> findAirlineById(int id);
-    Optional<Airline> updateAirline(int id, Airline airline);
-    List<Airline> findAll();
-    List<Airline> findByName(String name);
+    AirlineIdDto save(AirlineDto airline);
+    Optional<AirlineIdDto> findById(int id);
+    Optional<AirlineIdDto> update(int id, AirlineDto airline);
+    List<AirlineIdDto> findAll();
+    List<AirlineIdDto> findByName(String name);
     void deleteById(int id);
 }
