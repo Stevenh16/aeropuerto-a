@@ -1,6 +1,8 @@
 package model.controller;
 
-import model.entity.Airline;
+import lombok.AllArgsConstructor;
+import model.dto.AirlineDto;
+import model.dto.AirlineIdDto;
 import model.service.AirlineServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,45 +14,42 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/airlines")
+@AllArgsConstructor
 public class AirlineController {
     private final AirlineServices airlineServices;
 
-    public AirlineController(AirlineServices airlineServices) {
-        this.airlineServices = airlineServices;
-    }
     @GetMapping
-    public ResponseEntity<List<Airline>> getAirlines() {
+    public ResponseEntity<List<AirlineIdDto>> getAirlines() {
         return ResponseEntity.ok(airlineServices.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Airline> getAirlineById(@PathVariable("id") int id) {
-        return airlineServices.findAirlineById(id)
+    public ResponseEntity<AirlineIdDto> getAirlineById(@PathVariable("id") int id) {
+        return airlineServices.findById(id)
                 .map( a-> ResponseEntity.ok().body(a))
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping()
-    public ResponseEntity<Airline> createAirline(@RequestBody Airline airline) {
+    public ResponseEntity<AirlineIdDto> createAirline(@RequestBody AirlineDto airline) {
         return createNewAirline(airline);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Airline> updateAirline(@PathVariable int id, @RequestBody Airline airline){
-        Optional<Airline> airlineUpdated = airlineServices.updateAirline(id, airline);
-        return airlineUpdated
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> createNewAirline(airline));
+    public ResponseEntity<AirlineIdDto> updateAirline(@PathVariable int id, @RequestBody AirlineDto airline){
+        Optional<AirlineIdDto> airlineUpdated = airlineServices.update(id, airline);
+        return airlineUpdated.map(ResponseEntity::ok).orElseGet(() -> createNewAirline(airline));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Airline> deleteAirline(@PathVariable int id) {
+    public ResponseEntity<AirlineDto> deleteAirline(@PathVariable int id) {
         airlineServices.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    private static ResponseEntity<Airline> createNewAirline(Airline airline) {
+    private ResponseEntity<AirlineIdDto> createNewAirline(AirlineDto airline) {
+        AirlineIdDto airlineIdDto = airlineServices.save(airline);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(airline.getId())
+                .buildAndExpand(airlineIdDto.id())
                 .toUri();
-        return ResponseEntity.created(location).body(airline);
+        return ResponseEntity.created(location).body(airlineIdDto);
     }
 }

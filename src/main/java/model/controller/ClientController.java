@@ -1,6 +1,7 @@
 package model.controller;
 
-import model.entity.Client;
+import model.dto.ClientDto;
+import model.dto.ClientIdDto;
 import model.service.ClientServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,25 +21,25 @@ public class ClientController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Client>> getClients() {
-        return ResponseEntity.ok(clientService.findAllClients());
+    public ResponseEntity<List<ClientIdDto>> getClients() {
+        return ResponseEntity.ok(clientService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClientById(@PathVariable int id) {
-        return clientService.findClientById(id)
+    public ResponseEntity<ClientIdDto> getClientById(@PathVariable int id) {
+        return clientService.findById(id)
                 .map( c -> ResponseEntity.ok().body(c))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping()
-    public ResponseEntity<Client> createClient(@RequestBody Client client) {
+    public ResponseEntity<ClientIdDto> createClient(@RequestBody ClientDto client) {
         return createNewClient(client);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable int id, @RequestBody Client client) {
-        Optional<Client> clientUpdated = clientService.updateClient(id, client);
+    public ResponseEntity<ClientIdDto> updateClient(@PathVariable int id, @RequestBody ClientDto client) {
+        Optional<ClientIdDto> clientUpdated = clientService.update(id, client);
         return clientUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> createNewClient(client));
@@ -46,16 +47,17 @@ public class ClientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable int id) {
-        clientService.deleteClientById(id);
+        clientService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    private static ResponseEntity<Client> createNewClient(Client c) {
+    private ResponseEntity<ClientIdDto> createNewClient(ClientDto client) {
+        ClientIdDto clientIdDto = clientService.save(client);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(c.getId())
+                .buildAndExpand(clientIdDto.id())
                 .toUri();
-        return ResponseEntity.created(location).body(c);
+        return ResponseEntity.created(location).body(clientIdDto);
     }
 }

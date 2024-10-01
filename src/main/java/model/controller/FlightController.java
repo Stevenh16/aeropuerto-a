@@ -1,6 +1,7 @@
 package model.controller;
 
-import model.entity.Flight;
+import model.dto.FlightDto;
+import model.dto.FlightIdDto;
 import model.service.FlightServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,38 +19,39 @@ public class FlightController {
         this.flightServices = flightServices;
     }
     @GetMapping()
-    public ResponseEntity<List<Flight>> getFlights() {
+    public ResponseEntity<List<FlightIdDto>> getFlights() {
         return ResponseEntity.ok(flightServices.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Flight> getFlightById(@PathVariable int id) {
-        return flightServices.findFlightById(id)
+    public ResponseEntity<FlightIdDto> getFlightById(@PathVariable int id) {
+        return flightServices.findById(id)
                 .map(f->ResponseEntity.ok().body(f))
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping()
-    public ResponseEntity<Flight> createFlight(@RequestBody Flight flight) {
+    public ResponseEntity<FlightIdDto> createFlight(@RequestBody FlightDto flight) {
         return createNewFlight(flight);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Flight> updateFlight(@PathVariable int id, @RequestBody Flight flight) {
-        Optional<Flight> flightUpdate = flightServices.updateFlight(id, flight);
+    public ResponseEntity<FlightIdDto> updateFlight(@PathVariable int id, @RequestBody FlightDto flight) {
+        Optional<FlightIdDto> flightUpdate = flightServices.update(id, flight);
         return flightUpdate
                 .map(ResponseEntity::ok)
                 .orElseGet(()-> createNewFlight(flight));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Flight> deleteFlight(@PathVariable int id) {
-        flightServices.deleteFlightById(id);
+    public ResponseEntity<FlightIdDto> deleteFlight(@PathVariable int id) {
+        flightServices.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-    private ResponseEntity<Flight> createNewFlight(Flight flight) {
+    private ResponseEntity<FlightIdDto> createNewFlight(FlightDto flight) {
+        FlightIdDto flightIdDto = flightServices.save(flight);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(flight.getId())
+                .buildAndExpand(flightIdDto.id())
                 .toUri();
-        return ResponseEntity.created(location).body(flight);
+        return ResponseEntity.created(location).body(flightIdDto);
     }
 
 }

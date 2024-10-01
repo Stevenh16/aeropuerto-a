@@ -1,6 +1,8 @@
 package model.controller;
 
-import model.entity.Reserve;
+import model.dto.ReserveDto;
+import model.dto.ReserveIdDto;
+import model.mapper.ReserveMapper;
 import model.service.ReserveServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,36 +16,40 @@ import java.util.Optional;
 @RequestMapping("/api/v1/reserves")
 public class ReserveController {
     private final ReserveServices reserveServices;
-    public ReserveController(ReserveServices reserveServices) {
+    private final ReserveMapper reserveMapper;
+
+    public ReserveController(ReserveServices reserveServices, ReserveMapper reserveMapper) {
         this.reserveServices = reserveServices;
+        this.reserveMapper = reserveMapper;
     }
     @GetMapping
-    public ResponseEntity<List<Reserve>> getReserves() {
-        return ResponseEntity.ok(reserveServices.findAllReserves());
+    public ResponseEntity<List<ReserveIdDto>> getReserves() {
+        return ResponseEntity.ok(reserveServices.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Reserve> getReserveById(@PathVariable("id") int id) {
-        return reserveServices.findReserveById(id)
+    public ResponseEntity<ReserveIdDto> getReserveById(@PathVariable("id") int id) {
+        return reserveServices.findById(id)
                 .map(r->ResponseEntity.ok().body(r))
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping()
-    public ResponseEntity<Reserve> createReserve(@RequestBody Reserve reserve) {
+    public ResponseEntity<ReserveIdDto> createReserve(@RequestBody ReserveDto reserve) {
         return createNewReserve(reserve);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Reserve> updateReserve(@PathVariable int id, @RequestBody Reserve reserve) {
-        Optional<Reserve> reserveUpdate = reserveServices.updateReserve(id,reserve);
+    public ResponseEntity<ReserveIdDto> updateReserve(@PathVariable int id, @RequestBody ReserveDto reserve) {
+        Optional<ReserveIdDto> reserveUpdate = reserveServices.update(id,reserve);
         return reserveUpdate
                 .map(ResponseEntity::ok)
                 .orElseGet(()->createNewReserve(reserve));
     }
-    private ResponseEntity<Reserve> createNewReserve(Reserve reserve) {
+    private ResponseEntity<ReserveIdDto> createNewReserve(ReserveDto reserve) {
+        ReserveIdDto reserveIdDto = reserveServices.save(reserve);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(reserve.getId())
+                .buildAndExpand(reserveIdDto.id())
                 .toUri();
-        return ResponseEntity.created(location).body(reserve);
+        return ResponseEntity.created(location).body(reserveIdDto);
     }
 }

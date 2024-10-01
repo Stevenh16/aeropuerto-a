@@ -1,6 +1,7 @@
 package model.controller;
 
-import model.entity.Passenger;
+import model.dto.PassengerDto;
+import model.dto.PassengerIdDto;
 import model.service.PassengerServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,37 +19,38 @@ public class PassengerController {
         this.passengerServices = passengerServices;
     }
     @GetMapping()
-    public ResponseEntity<List<Passenger>> getPassengers() {
-        return ResponseEntity.ok(passengerServices.getAllPassengers());
+    public ResponseEntity<List<PassengerIdDto>> getPassengers() {
+        return ResponseEntity.ok(passengerServices.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Passenger> getPassengerById(@PathVariable("id") int id) {
-        return passengerServices.getPassengerById(id)
+    public ResponseEntity<PassengerIdDto> getPassengerById(@PathVariable("id") int id) {
+        return passengerServices.getById(id)
                 .map(p->ResponseEntity.ok().body(p))
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping()
-    public ResponseEntity<Passenger> createPassenger(@RequestBody Passenger passenger) {
+    public ResponseEntity<PassengerIdDto> createPassenger(@RequestBody PassengerDto passenger) {
         return createNewPassenger(passenger);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Passenger> updatePassenger(@PathVariable("id") int id,@RequestBody Passenger passenger) {
-        Optional<Passenger> passengerUpdated = passengerServices.updatePassenger(id, passenger);
+    public ResponseEntity<PassengerIdDto> updatePassenger(@PathVariable("id") int id,@RequestBody PassengerDto passenger) {
+        Optional<PassengerIdDto> passengerUpdated = passengerServices.update(id, passenger);
         return passengerUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(()->createNewPassenger(passenger));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Passenger> deletePassenger(@PathVariable("id") int id) {
-        passengerServices.deletePassenger(id);
+    public ResponseEntity<PassengerIdDto> deletePassenger(@PathVariable("id") int id) {
+        passengerServices.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-    private ResponseEntity<Passenger> createNewPassenger(Passenger passenger) {
+    private ResponseEntity<PassengerIdDto> createNewPassenger(PassengerDto passenger) {
+        PassengerIdDto passengerIdDto = passengerServices.save(passenger);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(passenger.getId())
+                .buildAndExpand(passengerIdDto.id())
                 .toUri();
-        return ResponseEntity.created(location).body(passenger);
+        return ResponseEntity.created(location).body(passengerIdDto);
     }
 }

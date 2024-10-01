@@ -1,6 +1,7 @@
 package model.controller;
 
-import model.entity.Airport;
+import model.dto.AirportDto;
+import model.dto.AirportIdDto;
 import model.service.AirportServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,37 +19,38 @@ public class AirportController {
         this.airportServices = airportServices;
     }
     @GetMapping
-    public ResponseEntity<List<Airport>> getAirports() {
-        return ResponseEntity.ok(airportServices.getAllAirports());
+    public ResponseEntity<List<AirportIdDto>> getAirports() {
+        return ResponseEntity.ok(airportServices.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Airport> getAirportById(@PathVariable("id") int id) {
-        return airportServices.findAirportById(id)
+    public ResponseEntity<AirportIdDto> getAirportById(@PathVariable("id") int id) {
+        return airportServices.findById(id)
                 .map(a->ResponseEntity.ok().body(a))
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping
-    public ResponseEntity<Airport> createAirport(@RequestBody Airport airport) {
+    public ResponseEntity<AirportIdDto> createAirport(@RequestBody AirportDto airport) {
         return createNewAirport(airport);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Airport> updateAirport(@PathVariable int id, @RequestBody Airport airport) {
-        Optional<Airport> airportUpdated = airportServices.updateAirport(id, airport);
+    public ResponseEntity<AirportIdDto> updateAirport(@PathVariable int id, @RequestBody AirportDto airport) {
+        Optional<AirportIdDto> airportUpdated = airportServices.update(id, airport);
         return airportUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> createNewAirport(airport));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Airport> deleteAirport(@PathVariable int id) {
-        airportServices.deleteAirport(id);
+    public ResponseEntity<AirportIdDto> deleteAirport(@PathVariable int id) {
+        airportServices.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-    private ResponseEntity<Airport> createNewAirport(Airport airport) {
+    private ResponseEntity<AirportIdDto> createNewAirport(AirportDto airport) {
+        AirportIdDto airportIdDto = airportServices.save(airport);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(airport.getId())
+                .buildAndExpand(airportIdDto.id())
                 .toUri();
-        return ResponseEntity.created(location).body(airport);
+        return ResponseEntity.created(location).body(airportIdDto);
     }
 }
