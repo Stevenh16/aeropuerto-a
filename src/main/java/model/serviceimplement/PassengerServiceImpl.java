@@ -2,7 +2,6 @@ package model.serviceimplement;
 
 import lombok.AllArgsConstructor;
 import model.dto.PassengerDto;
-import model.dto.PassengerIdDto;
 import model.entity.Passenger;
 import model.mapper.PassengerMapper;
 import model.mapper.ReserveMapper;
@@ -22,17 +21,17 @@ public class PassengerServiceImpl implements PassengerServices {
     PassengerRepository passengerRepository;
 
     @Override
-    public PassengerIdDto save(PassengerDto passenger) {
+    public PassengerDto save(PassengerDto passenger) {
         return passengerMapper.toIdDto(passengerRepository.save(passengerMapper.toEntity(passenger)));
     }
 
     @Override
-    public Optional<PassengerIdDto> getById(int id) {
+    public Optional<PassengerDto> getById(int id) {
         return Optional.of(passengerMapper.toIdDto(passengerRepository.findById(id).get()));
     }
 
     @Override
-    public Optional<PassengerIdDto> update(int id, PassengerDto passenger) {
+    public Optional<PassengerDto> update(int id, PassengerDto passenger) {
         return Optional.of(passengerMapper.toIdDto(passengerRepository.findById(id).map(oldPassenger ->{
             oldPassenger.setName(passenger.name());
             oldPassenger.setLastname(passenger.lastname());
@@ -45,16 +44,16 @@ public class PassengerServiceImpl implements PassengerServices {
     }
 
     @Override
-    public List<PassengerIdDto> findAll() {
-        return passengerMapper.toIdDtos(passengerRepository.findAll());
+    public List<PassengerDto> findAll() {
+        return passengerMapper.toListIdDto(passengerRepository.findAll());
     }
 
     @Override
-    public List<PassengerIdDto> findByName(String name) {
+    public List<PassengerDto> findByName(String name) {
         Passenger p = new Passenger();
         p.setName(name);
         Example<Passenger> example = Example.of(p);
-        return passengerMapper.toIdDtos(passengerRepository.findAll(example));
+        return passengerMapper.toListIdDto(passengerRepository.findAll(example));
     }
 
     @Override

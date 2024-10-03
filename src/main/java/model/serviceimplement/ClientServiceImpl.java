@@ -2,7 +2,6 @@ package model.serviceimplement;
 
 import lombok.AllArgsConstructor;
 import model.dto.ClientDto;
-import model.dto.ClientIdDto;
 import model.entity.Client;
 import model.mapper.ClientMapper;
 import model.mapper.ReserveMapper;
@@ -22,39 +21,39 @@ public class ClientServiceImpl implements ClientServices {
     private ClientRepository clientRepository;
 
     @Override
-    public ClientIdDto save(ClientDto client) {
+    public ClientDto save(ClientDto client) {
         return clientMapper.toIdDto(clientRepository.save(clientMapper.toEntity(client)));
     }
 
     @Override
-    public Optional<ClientIdDto> findById(int id) {
+    public Optional<ClientDto> findById(int id) {
         return Optional.of(clientMapper.toIdDto(clientRepository.findById(id).get()));
     }
 
     @Override
-    public Optional<ClientIdDto> update(int id, ClientDto client) {
+    public Optional<ClientDto> update(int id, ClientDto client) {
         return Optional.of(clientMapper.toIdDto(clientRepository.findById(id).map(oldClient -> {
             oldClient.setAddress(client.address());
             oldClient.setName(client.name());
             oldClient.setLastname(client.lastname());
             oldClient.setEmail(client.email());
             oldClient.setCellphone(client.cellphone());
-            oldClient.setReserves(reserveMapper.toEntities(client.reserves()));
+            oldClient.setReserves(reserveMapper.toListEntity(client.reserves()));
             return clientRepository.save(oldClient);
         }).get()));
     }
 
     @Override
-    public List<ClientIdDto> findAll() {
-        return clientMapper.toIdDtos(clientRepository.findAll());
+    public List<ClientDto> findAll() {
+        return clientMapper.toListIdDto(clientRepository.findAll());
     }
 
     @Override
-    public List<ClientIdDto> findByName(String name) {
+    public List<ClientDto> findByName(String name) {
         Client c = new Client();
         c.setName(name);
         Example<Client> example = Example.of(c);
-        return clientMapper.toIdDtos(clientRepository.findAll(example));
+        return clientMapper.toListIdDto(clientRepository.findAll(example));
     }
 
     @Override

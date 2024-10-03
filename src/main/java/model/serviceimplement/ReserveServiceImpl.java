@@ -3,7 +3,6 @@ package model.serviceimplement;
 import lombok.AllArgsConstructor;
 import model.dto.ClientDto;
 import model.dto.ReserveDto;
-import model.dto.ReserveIdDto;
 import model.entity.Reserve;
 import model.mapper.ClientMapper;
 import model.mapper.FlightMapper;
@@ -28,46 +27,46 @@ public class ReserveServiceImpl implements ReserveServices {
     ReserveRepository reserveRepository;
 
     @Override
-    public ReserveIdDto save(ReserveDto reserve) {
+    public ReserveDto save(ReserveDto reserve) {
         return reserveMapper.toIdDto(reserveRepository.save(reserveMapper.toEntity(reserve)));
     }
 
     @Override
-    public Optional<ReserveIdDto> findById(int id) {
+    public Optional<ReserveDto> findById(int id) {
         return Optional.of(reserveMapper.toIdDto(reserveRepository.findById(id).get()));
     }
 
     @Override
-    public Optional<ReserveIdDto> update(int id, ReserveDto reserve) {
+    public Optional<ReserveDto> update(int id, ReserveDto reserve) {
         return Optional.of(reserveMapper.toIdDto(reserveRepository.findById(id).map(oldReserve -> {
             oldReserve.setClient(clientMapper.toEntity(reserve.client()));
             oldReserve.setDate(reserve.date());
-            oldReserve.setFlights(flightMapper.toEntities(reserve.flights()));
-            oldReserve.setPassengers(passengerMapper.toEntities(reserve.passengers()));
+            oldReserve.setFlights(flightMapper.toListEntity(reserve.flights()));
+            oldReserve.setPassengers(passengerMapper.toListEntity(reserve.passengers()));
             oldReserve.setNumbersOfPassengers(reserve.numbersOfPassengers());
             return reserveRepository.save(oldReserve);
         }).get()));
     }
 
     @Override
-    public List<ReserveIdDto> findAll() {
-        return reserveMapper.toIdDtos(reserveRepository.findAll());
+    public List<ReserveDto> findAll() {
+        return reserveMapper.toListIdDto(reserveRepository.findAll());
     }
 
     @Override
-    public List<ReserveIdDto> findByClient(ClientDto client) {
+    public List<ReserveDto> findByClient(ClientDto client) {
         Reserve r = new Reserve();
         r.setClient(clientMapper.toEntity(client));
         Example<Reserve> example = Example.of(r);
-        return reserveMapper.toIdDtos(reserveRepository.findAll(example));
+        return reserveMapper.toListIdDto(reserveRepository.findAll(example));
     }
 
     @Override
-    public List<ReserveIdDto> findByDate(LocalDate date) {
+    public List<ReserveDto> findByDate(LocalDate date) {
         Reserve r = new Reserve();
         r.setDate(date);
         Example<Reserve> example = Example.of(r);
-        return reserveMapper.toIdDtos(reserveRepository.findAll(example));
+        return reserveMapper.toListIdDto(reserveRepository.findAll(example));
     }
 
     @Override
