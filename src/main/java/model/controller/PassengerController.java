@@ -1,7 +1,7 @@
 package model.controller;
 
+import lombok.AllArgsConstructor;
 import model.dto.PassengerDto;
-import model.dto.PassengerIdDto;
 import model.service.PassengerServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,39 +13,37 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/passengers")
+@AllArgsConstructor
 public class PassengerController {
     private final PassengerServices passengerServices;
-    public PassengerController(PassengerServices passengerServices) {
-        this.passengerServices = passengerServices;
-    }
     @GetMapping()
-    public ResponseEntity<List<PassengerIdDto>> getPassengers() {
+    public ResponseEntity<List<PassengerDto>> getPassengers() {
         return ResponseEntity.ok(passengerServices.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<PassengerIdDto> getPassengerById(@PathVariable("id") int id) {
+    public ResponseEntity<PassengerDto> getPassengerById(@PathVariable("id") int id) {
         return passengerServices.getById(id)
                 .map(p->ResponseEntity.ok().body(p))
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping()
-    public ResponseEntity<PassengerIdDto> createPassenger(@RequestBody PassengerDto passenger) {
+    public ResponseEntity<PassengerDto> createPassenger(@RequestBody PassengerDto passenger) {
         return createNewPassenger(passenger);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<PassengerIdDto> updatePassenger(@PathVariable("id") int id,@RequestBody PassengerDto passenger) {
-        Optional<PassengerIdDto> passengerUpdated = passengerServices.update(id, passenger);
+    public ResponseEntity<PassengerDto> updatePassenger(@PathVariable("id") int id,@RequestBody PassengerDto passenger) {
+        Optional<PassengerDto> passengerUpdated = passengerServices.update(id, passenger);
         return passengerUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(()->createNewPassenger(passenger));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<PassengerIdDto> deletePassenger(@PathVariable("id") int id) {
+    public ResponseEntity<PassengerDto> deletePassenger(@PathVariable("id") int id) {
         passengerServices.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-    private ResponseEntity<PassengerIdDto> createNewPassenger(PassengerDto passenger) {
-        PassengerIdDto passengerIdDto = passengerServices.save(passenger);
+    private ResponseEntity<PassengerDto> createNewPassenger(PassengerDto passenger) {
+        PassengerDto passengerIdDto = passengerServices.save(passenger);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

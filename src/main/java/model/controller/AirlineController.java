@@ -2,7 +2,6 @@ package model.controller;
 
 import lombok.AllArgsConstructor;
 import model.dto.AirlineDto;
-import model.dto.AirlineIdDto;
 import model.service.AirlineServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,22 +18,22 @@ public class AirlineController {
     private final AirlineServices airlineServices;
 
     @GetMapping
-    public ResponseEntity<List<AirlineIdDto>> getAirlines() {
+    public ResponseEntity<List<AirlineDto>> getAirlines() {
         return ResponseEntity.ok(airlineServices.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<AirlineIdDto> getAirlineById(@PathVariable("id") int id) {
+    public ResponseEntity<AirlineDto> getAirlineById(@PathVariable("id") int id) {
         return airlineServices.findById(id)
                 .map( a-> ResponseEntity.ok().body(a))
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping()
-    public ResponseEntity<AirlineIdDto> createAirline(@RequestBody AirlineDto airline) {
+    public ResponseEntity<AirlineDto> createAirline(@RequestBody AirlineDto airline) {
         return createNewAirline(airline);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<AirlineIdDto> updateAirline(@PathVariable int id, @RequestBody AirlineDto airline){
-        Optional<AirlineIdDto> airlineUpdated = airlineServices.update(id, airline);
+    public ResponseEntity<AirlineDto> updateAirline(@PathVariable int id, @RequestBody AirlineDto airline){
+        Optional<AirlineDto> airlineUpdated = airlineServices.update(id, airline);
         return airlineUpdated.map(ResponseEntity::ok).orElseGet(() -> createNewAirline(airline));
     }
     @DeleteMapping("/{id}")
@@ -43,8 +42,8 @@ public class AirlineController {
         return ResponseEntity.noContent().build();
     }
 
-    private ResponseEntity<AirlineIdDto> createNewAirline(AirlineDto airline) {
-        AirlineIdDto airlineIdDto = airlineServices.save(airline);
+    private ResponseEntity<AirlineDto> createNewAirline(AirlineDto airline) {
+        AirlineDto airlineIdDto = airlineServices.save(airline);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

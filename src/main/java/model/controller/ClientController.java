@@ -1,7 +1,7 @@
 package model.controller;
 
+import lombok.AllArgsConstructor;
 import model.dto.ClientDto;
-import model.dto.ClientIdDto;
 import model.service.ClientServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,33 +13,31 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/clients")
+@AllArgsConstructor
 public class ClientController {
     private final ClientServices clientService;
 
-    public ClientController(ClientServices clientService) {
-        this.clientService = clientService;
-    }
 
     @GetMapping()
-    public ResponseEntity<List<ClientIdDto>> getClients() {
+    public ResponseEntity<List<ClientDto>> getClients() {
         return ResponseEntity.ok(clientService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientIdDto> getClientById(@PathVariable int id) {
+    public ResponseEntity<ClientDto> getClientById(@PathVariable int id) {
         return clientService.findById(id)
                 .map( c -> ResponseEntity.ok().body(c))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping()
-    public ResponseEntity<ClientIdDto> createClient(@RequestBody ClientDto client) {
+    public ResponseEntity<ClientDto> createClient(@RequestBody ClientDto client) {
         return createNewClient(client);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientIdDto> updateClient(@PathVariable int id, @RequestBody ClientDto client) {
-        Optional<ClientIdDto> clientUpdated = clientService.update(id, client);
+    public ResponseEntity<ClientDto> updateClient(@PathVariable int id, @RequestBody ClientDto client) {
+        Optional<ClientDto> clientUpdated = clientService.update(id, client);
         return clientUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> createNewClient(client));
@@ -51,8 +49,8 @@ public class ClientController {
         return ResponseEntity.noContent().build();
     }
 
-    private ResponseEntity<ClientIdDto> createNewClient(ClientDto client) {
-        ClientIdDto clientIdDto = clientService.save(client);
+    private ResponseEntity<ClientDto> createNewClient(ClientDto client) {
+        ClientDto clientIdDto = clientService.save(client);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

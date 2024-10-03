@@ -1,7 +1,7 @@
 package model.controller;
 
+import lombok.AllArgsConstructor;
 import model.dto.ReserveDto;
-import model.dto.ReserveIdDto;
 import model.mapper.ReserveMapper;
 import model.service.ReserveServices;
 import org.springframework.http.ResponseEntity;
@@ -14,37 +14,33 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/reserves")
+@AllArgsConstructor
 public class ReserveController {
     private final ReserveServices reserveServices;
-    private final ReserveMapper reserveMapper;
 
-    public ReserveController(ReserveServices reserveServices, ReserveMapper reserveMapper) {
-        this.reserveServices = reserveServices;
-        this.reserveMapper = reserveMapper;
-    }
     @GetMapping
-    public ResponseEntity<List<ReserveIdDto>> getReserves() {
+    public ResponseEntity<List<ReserveDto>> getReserves() {
         return ResponseEntity.ok(reserveServices.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ReserveIdDto> getReserveById(@PathVariable("id") int id) {
+    public ResponseEntity<ReserveDto> getReserveById(@PathVariable("id") int id) {
         return reserveServices.findById(id)
                 .map(r->ResponseEntity.ok().body(r))
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping()
-    public ResponseEntity<ReserveIdDto> createReserve(@RequestBody ReserveDto reserve) {
+    public ResponseEntity<ReserveDto> createReserve(@RequestBody ReserveDto reserve) {
         return createNewReserve(reserve);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ReserveIdDto> updateReserve(@PathVariable int id, @RequestBody ReserveDto reserve) {
-        Optional<ReserveIdDto> reserveUpdate = reserveServices.update(id,reserve);
+    public ResponseEntity<ReserveDto> updateReserve(@PathVariable int id, @RequestBody ReserveDto reserve) {
+        Optional<ReserveDto> reserveUpdate = reserveServices.update(id,reserve);
         return reserveUpdate
                 .map(ResponseEntity::ok)
                 .orElseGet(()->createNewReserve(reserve));
     }
-    private ResponseEntity<ReserveIdDto> createNewReserve(ReserveDto reserve) {
-        ReserveIdDto reserveIdDto = reserveServices.save(reserve);
+    private ResponseEntity<ReserveDto> createNewReserve(ReserveDto reserve) {
+        ReserveDto reserveIdDto = reserveServices.save(reserve);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
