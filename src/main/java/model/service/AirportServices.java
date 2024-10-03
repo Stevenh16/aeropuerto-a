@@ -1,16 +1,15 @@
 package model.service;
 
 import model.dto.AirportDto;
-import model.dto.AirportIdDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AirportServices {
-    AirportIdDto save(AirportDto airport);
-    Optional<AirportIdDto> findById(int id);
-    Optional<AirportIdDto> update(int id, AirportDto airport);
-    List<AirportIdDto> findAll();
-    List<AirportIdDto> findByName(String name);
+    AirportDto save(AirportDto airport);
+    Optional<AirportDto> findById(int id);
+    Optional<AirportDto> update(int id, AirportDto airport);
+    List<AirportDto> findAll();
+    List<AirportDto> findByName(String name);
     void deleteById(int id);
 }
