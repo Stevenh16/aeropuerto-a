@@ -32,7 +32,7 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public Optional<FlightDto> findById(int id) {
-        return Optional.of(flightMapper.toIdDto(flightRepository.findById(id).get()));
+        return flightRepository.findById(id).map(flightMapper::toIdDto);
     }
 
     @Override

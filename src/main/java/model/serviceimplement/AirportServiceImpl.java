@@ -27,7 +27,7 @@ public class AirportServiceImpl implements AirportService {
 
     @Override
     public Optional<AirportDto> findById(int id) {
-        return Optional.of(airportMapper.toDto(airportRepository.findById((long) id).get()));
+        return airportRepository.findById((long) id).map(airportMapper::toIdDto);
     }
 
     @Override

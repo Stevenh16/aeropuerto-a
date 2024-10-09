@@ -33,7 +33,7 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public Optional<ReserveDto> findById(int id) {
-        return Optional.of(reserveMapper.toIdDto(reserveRepository.findById(id).get()));
+        return reserveRepository.findById(id).map(reserveMapper::toDto);
     }
 
     @Override

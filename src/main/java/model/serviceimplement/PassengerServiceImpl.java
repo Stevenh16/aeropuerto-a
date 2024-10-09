@@ -27,7 +27,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public Optional<PassengerDto> getById(int id) {
-        return Optional.of(passengerMapper.toIdDto(passengerRepository.findById(id).get()));
+        return passengerRepository.findById(id).map(passengerMapper::toIdDto);
     }
 
     @Override

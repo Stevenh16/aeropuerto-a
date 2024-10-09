@@ -27,7 +27,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Optional<ClientDto> findById(int id) {
-        return Optional.of(clientMapper.toIdDto(clientRepository.findById(id).get()));
+        return clientRepository.findById(id).map(clientMapper::toIdDto);
     }
 
     @Override

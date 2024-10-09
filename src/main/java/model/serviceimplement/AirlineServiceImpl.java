@@ -27,7 +27,7 @@ public class AirlineServiceImpl implements AirlineService {
 
     @Override
     public Optional<AirlineDto> findById(int id) {
-        return Optional.of(airlineMapper.toIdDto(airlineRepository.findById(id).get()));
+        return airlineRepository.findById(id).map(airlineMapper::toIdDto);
     }
 
     @Override
