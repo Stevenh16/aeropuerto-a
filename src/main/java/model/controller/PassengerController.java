@@ -2,7 +2,7 @@ package model.controller;
 
 import lombok.AllArgsConstructor;
 import model.dto.PassengerDto;
-import model.service.PassengerServices;
+import model.service.PassengerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,14 +15,14 @@ import java.util.Optional;
 @RequestMapping("/api/v1/passengers")
 @AllArgsConstructor
 public class PassengerController {
-    private final PassengerServices passengerServices;
+    private final PassengerService passengerService;
     @GetMapping()
     public ResponseEntity<List<PassengerDto>> getPassengers() {
-        return ResponseEntity.ok(passengerServices.findAll());
+        return ResponseEntity.ok(passengerService.findAll());
     }
     @GetMapping("/{id}")
     public ResponseEntity<PassengerDto> getPassengerById(@PathVariable("id") int id) {
-        return passengerServices.getById(id)
+        return passengerService.getById(id)
                 .map(p->ResponseEntity.ok().body(p))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -32,18 +32,18 @@ public class PassengerController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<PassengerDto> updatePassenger(@PathVariable("id") int id,@RequestBody PassengerDto passenger) {
-        Optional<PassengerDto> passengerUpdated = passengerServices.update(id, passenger);
+        Optional<PassengerDto> passengerUpdated = passengerService.update(id, passenger);
         return passengerUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(()->createNewPassenger(passenger));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<PassengerDto> deletePassenger(@PathVariable("id") int id) {
-        passengerServices.deleteById(id);
+        passengerService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     private ResponseEntity<PassengerDto> createNewPassenger(PassengerDto passenger) {
-        PassengerDto passengerIdDto = passengerServices.save(passenger);
+        PassengerDto passengerIdDto = passengerService.save(passenger);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

@@ -2,7 +2,7 @@ package model.controller;
 
 import lombok.AllArgsConstructor;
 import model.dto.AirlineDto;
-import model.service.AirlineServices;
+import model.service.AirlineService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,15 +15,15 @@ import java.util.Optional;
 @RequestMapping("/api/v1/airlines")
 @AllArgsConstructor
 public class AirlineController {
-    private final AirlineServices airlineServices;
+    private final AirlineService airlineService;
 
     @GetMapping
     public ResponseEntity<List<AirlineDto>> getAirlines() {
-        return ResponseEntity.ok(airlineServices.findAll());
+        return ResponseEntity.ok(airlineService.findAll());
     }
     @GetMapping("/{id}")
     public ResponseEntity<AirlineDto> getAirlineById(@PathVariable("id") int id) {
-        return airlineServices.findById(id)
+        return airlineService.findById(id)
                 .map( a-> ResponseEntity.ok().body(a))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -33,17 +33,17 @@ public class AirlineController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<AirlineDto> updateAirline(@PathVariable int id, @RequestBody AirlineDto airline){
-        Optional<AirlineDto> airlineUpdated = airlineServices.update(id, airline);
+        Optional<AirlineDto> airlineUpdated = airlineService.update(id, airline);
         return airlineUpdated.map(ResponseEntity::ok).orElseGet(() -> createNewAirline(airline));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<AirlineDto> deleteAirline(@PathVariable int id) {
-        airlineServices.deleteById(id);
+        airlineService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     private ResponseEntity<AirlineDto> createNewAirline(AirlineDto airline) {
-        AirlineDto airlineIdDto = airlineServices.save(airline);
+        AirlineDto airlineIdDto = airlineService.save(airline);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

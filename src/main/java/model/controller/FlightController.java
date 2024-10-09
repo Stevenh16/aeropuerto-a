@@ -2,7 +2,7 @@ package model.controller;
 
 import lombok.AllArgsConstructor;
 import model.dto.FlightDto;
-import model.service.FlightServices;
+import model.service.FlightService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,14 +15,14 @@ import java.util.Optional;
 @RequestMapping("/api/v1/flights")
 @AllArgsConstructor
 public class FlightController {
-    private final FlightServices flightServices;
+    private final FlightService flightService;
     @GetMapping()
     public ResponseEntity<List<FlightDto>> getFlights() {
-        return ResponseEntity.ok(flightServices.findAll());
+        return ResponseEntity.ok(flightService.findAll());
     }
     @GetMapping("/{id}")
     public ResponseEntity<FlightDto> getFlightById(@PathVariable int id) {
-        return flightServices.findById(id)
+        return flightService.findById(id)
                 .map(f->ResponseEntity.ok().body(f))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -32,18 +32,18 @@ public class FlightController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<FlightDto> updateFlight(@PathVariable int id, @RequestBody FlightDto flight) {
-        Optional<FlightDto> flightUpdate = flightServices.update(id, flight);
+        Optional<FlightDto> flightUpdate = flightService.update(id, flight);
         return flightUpdate
                 .map(ResponseEntity::ok)
                 .orElseGet(()-> createNewFlight(flight));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<FlightDto> deleteFlight(@PathVariable int id) {
-        flightServices.deleteById(id);
+        flightService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     private ResponseEntity<FlightDto> createNewFlight(FlightDto flight) {
-        FlightDto flightIdDto = flightServices.save(flight);
+        FlightDto flightIdDto = flightService.save(flight);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

@@ -2,8 +2,7 @@ package model.controller;
 
 import lombok.AllArgsConstructor;
 import model.dto.ReserveDto;
-import model.mapper.ReserveMapper;
-import model.service.ReserveServices;
+import model.service.ReserveService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,15 +15,15 @@ import java.util.Optional;
 @RequestMapping("/api/v1/reserves")
 @AllArgsConstructor
 public class ReserveController {
-    private final ReserveServices reserveServices;
+    private final ReserveService reserveService;
 
     @GetMapping
     public ResponseEntity<List<ReserveDto>> getReserves() {
-        return ResponseEntity.ok(reserveServices.findAll());
+        return ResponseEntity.ok(reserveService.findAll());
     }
     @GetMapping("/{id}")
     public ResponseEntity<ReserveDto> getReserveById(@PathVariable("id") int id) {
-        return reserveServices.findById(id)
+        return reserveService.findById(id)
                 .map(r->ResponseEntity.ok().body(r))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -34,13 +33,13 @@ public class ReserveController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<ReserveDto> updateReserve(@PathVariable int id, @RequestBody ReserveDto reserve) {
-        Optional<ReserveDto> reserveUpdate = reserveServices.update(id,reserve);
+        Optional<ReserveDto> reserveUpdate = reserveService.update(id,reserve);
         return reserveUpdate
                 .map(ResponseEntity::ok)
                 .orElseGet(()->createNewReserve(reserve));
     }
     private ResponseEntity<ReserveDto> createNewReserve(ReserveDto reserve) {
-        ReserveDto reserveIdDto = reserveServices.save(reserve);
+        ReserveDto reserveIdDto = reserveService.save(reserve);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

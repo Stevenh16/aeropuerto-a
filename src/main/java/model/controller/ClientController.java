@@ -2,7 +2,7 @@ package model.controller;
 
 import lombok.AllArgsConstructor;
 import model.dto.ClientDto;
-import model.service.ClientServices;
+import model.service.ClientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/clients")
 @AllArgsConstructor
 public class ClientController {
-    private final ClientServices clientService;
+    private final ClientService clientService;
 
 
     @GetMapping()

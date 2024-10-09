@@ -2,7 +2,7 @@ package model.controller;
 
 import lombok.AllArgsConstructor;
 import model.dto.AirportDto;
-import model.service.AirportServices;
+import model.service.AirportService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,14 +15,14 @@ import java.util.Optional;
 @RequestMapping("/api/v1/airports")
 @AllArgsConstructor
 public class AirportController {
-    private final AirportServices airportServices;
+    private final AirportService airportService;
     @GetMapping
     public ResponseEntity<List<AirportDto>> getAirports() {
-        return ResponseEntity.ok(airportServices.findAll());
+        return ResponseEntity.ok(airportService.findAll());
     }
     @GetMapping("/{id}")
     public ResponseEntity<AirportDto> getAirportById(@PathVariable("id") int id) {
-        return airportServices.findById(id)
+        return airportService.findById(id)
                 .map(a->ResponseEntity.ok().body(a))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -32,18 +32,18 @@ public class AirportController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<AirportDto> updateAirport(@PathVariable int id, @RequestBody AirportDto airport) {
-        Optional<AirportDto> airportUpdated = airportServices.update(id, airport);
+        Optional<AirportDto> airportUpdated = airportService.update(id, airport);
         return airportUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> createNewAirport(airport));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<AirportDto> deleteAirport(@PathVariable int id) {
-        airportServices.deleteById(id);
+        airportService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     private ResponseEntity<AirportDto> createNewAirport(AirportDto airport) {
-        AirportDto airportIdDto = airportServices.save(airport);
+        AirportDto airportIdDto = airportService.save(airport);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
