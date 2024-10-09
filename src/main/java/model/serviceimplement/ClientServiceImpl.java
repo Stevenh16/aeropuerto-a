@@ -6,7 +6,7 @@ import model.entity.Client;
 import model.mapper.ClientMapper;
 import model.mapper.ReserveMapper;
 import model.repository.ClientRepository;
-import model.service.ClientServices;
+import model.service.ClientService;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ClientServiceImpl implements ClientServices {
+public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
     private final ReserveMapper reserveMapper;
     private ClientRepository clientRepository;
@@ -32,15 +32,15 @@ public class ClientServiceImpl implements ClientServices {
 
     @Override
     public Optional<ClientDto> update(int id, ClientDto client) {
-        return Optional.of(clientMapper.toIdDto(clientRepository.findById(id).map(oldClient -> {
+        return clientRepository.findById(id).map(oldClient -> {
             oldClient.setAddress(client.address());
             oldClient.setName(client.name());
             oldClient.setLastname(client.lastname());
             oldClient.setEmail(client.email());
             oldClient.setCellphone(client.cellphone());
             oldClient.setReserves(reserveMapper.toListEntity(client.reserves()));
-            return clientRepository.save(oldClient);
-        }).get()));
+            return clientMapper.toIdDto(clientRepository.save(oldClient));
+        });
     }
 
     @Override

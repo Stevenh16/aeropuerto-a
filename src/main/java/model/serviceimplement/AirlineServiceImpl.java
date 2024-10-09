@@ -6,7 +6,7 @@ import model.entity.Airline;
 import model.mapper.AirlineMapper;
 import model.mapper.FlightMapper;
 import model.repository.AirlineRepository;
-import model.service.AirlineServices;
+import model.service.AirlineService;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class AirlineServiceImpl implements AirlineServices {
+public class AirlineServiceImpl implements AirlineService {
     private AirlineRepository airlineRepository;
     private FlightMapper flightMapper;
     private AirlineMapper airlineMapper;
@@ -32,13 +32,13 @@ public class AirlineServiceImpl implements AirlineServices {
 
     @Override
     public Optional<AirlineDto> update(int id, AirlineDto airline) {
-        return Optional.of(airlineMapper.toIdDto( airlineRepository.findById(id).map(oldAirline -> {
+        return airlineRepository.findById(id).map(oldAirline -> {
             oldAirline.setAirlineCode(airline.airlineCode());
             oldAirline.setName(airline.name());
             oldAirline.setCountryOfOrigin(airline.countryOfOrigin());
             oldAirline.setFlights(flightMapper.toListEntity(airline.flights()));//Preguntar!!! Los Flights a asignar no tendran los mismos ids que los originales, o eso creo.
-            return airlineRepository.save(oldAirline);
-        }).get() ));
+            return airlineMapper.toIdDto(airlineRepository.save(oldAirline));
+        });
     }
 
     @Override

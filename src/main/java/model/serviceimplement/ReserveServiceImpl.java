@@ -9,7 +9,7 @@ import model.mapper.FlightMapper;
 import model.mapper.PassengerMapper;
 import model.mapper.ReserveMapper;
 import model.repository.ReserveRepository;
-import model.service.ReserveServices;
+import model.service.ReserveService;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ReserveServiceImpl implements ReserveServices {
+public class ReserveServiceImpl implements ReserveService {
     private final ReserveMapper reserveMapper;
     private final ClientMapper clientMapper;
     private final FlightMapper flightMapper;
@@ -38,14 +38,14 @@ public class ReserveServiceImpl implements ReserveServices {
 
     @Override
     public Optional<ReserveDto> update(int id, ReserveDto reserve) {
-        return Optional.of(reserveMapper.toIdDto(reserveRepository.findById(id).map(oldReserve -> {
+        return reserveRepository.findById(id).map(oldReserve -> {
             oldReserve.setClient(clientMapper.toEntity(reserve.client()));
             oldReserve.setDate(reserve.date());
             oldReserve.setFlights(flightMapper.toListEntity(reserve.flights()));
             oldReserve.setPassengers(passengerMapper.toListEntity(reserve.passengers()));
             oldReserve.setNumbersOfPassengers(reserve.numbersOfPassengers());
-            return reserveRepository.save(oldReserve);
-        }).get()));
+            return reserveMapper.toIdDto(reserveRepository.save(oldReserve));
+        });
     }
 
     @Override

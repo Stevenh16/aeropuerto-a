@@ -6,7 +6,7 @@ import model.entity.Airport;
 import model.mapper.AirportMapper;
 import model.mapper.FlightMapper;
 import model.repository.AirportRepository;
-import model.service.AirportServices;
+import model.service.AirportService;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class AirportServiceImpl implements AirportServices {
+public class AirportServiceImpl implements AirportService {
     private AirportMapper airportMapper;
     private FlightMapper flightMapper;
     private AirportRepository airportRepository;
@@ -32,14 +32,14 @@ public class AirportServiceImpl implements AirportServices {
 
     @Override
     public Optional<AirportDto> update(int id, AirportDto airport) {
-        return Optional.of(airportMapper.toDto( airportRepository.findById((long) id).map(oldAirport -> {
+        return airportRepository.findById((long) id).map(oldAirport -> {
             oldAirport.setCity(airport.city());
             oldAirport.setCountry(airport.country());
             oldAirport.setName(airport.name());
             oldAirport.setFlightsOrigins(flightMapper.toListEntity(airport.flightsOrigins()));
             oldAirport.setFlightsDestinations(flightMapper.toListEntity(airport.flightsDestinations()));
-            return airportRepository.save(oldAirport);
-        }).get()));
+            return airportMapper.toIdDto(airportRepository.save(oldAirport));
+        });
     }
 
     @Override

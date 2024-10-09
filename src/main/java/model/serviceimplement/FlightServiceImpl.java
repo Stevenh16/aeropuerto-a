@@ -8,7 +8,7 @@ import model.mapper.AirportMapper;
 import model.mapper.FlightMapper;
 import model.mapper.ReserveMapper;
 import model.repository.FlightRepository;
-import model.service.FlightServices;
+import model.service.FlightService;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class FlightServiceImpl implements FlightServices {
+public class FlightServiceImpl implements FlightService {
     private final FlightMapper flightMapper;
     private final AirlineMapper airlineMapper;
     private final ReserveMapper reserveMapper;
@@ -37,7 +37,7 @@ public class FlightServiceImpl implements FlightServices {
 
     @Override
     public Optional<FlightDto> update(int id, FlightDto flight) {
-        return Optional.of(flightMapper.toIdDto(flightRepository.findById(id).map(oldFlight ->{
+        return flightRepository.findById(id).map(oldFlight ->{
             oldFlight.setExitTime(flight.exitTime());
             oldFlight.setAirline(airlineMapper.toEntity(flight.airline()));
             oldFlight.setReserves(reserveMapper.toListEntity(flight.reserves()));
@@ -46,8 +46,8 @@ public class FlightServiceImpl implements FlightServices {
             oldFlight.setAirport_destination(airportMapper.toEntity(flight.airportDestination()));
             oldFlight.setAirport_origin(airportMapper.toEntity(flight.airportOrigin()));
             oldFlight.setExitDate(flight.exitDate());
-            return flightRepository.save(oldFlight);
-        }).get()));
+            return flightMapper.toIdDto(flightRepository.save(oldFlight));
+        });
     }
 
     @Override

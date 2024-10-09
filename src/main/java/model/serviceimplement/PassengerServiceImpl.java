@@ -6,7 +6,7 @@ import model.entity.Passenger;
 import model.mapper.PassengerMapper;
 import model.mapper.ReserveMapper;
 import model.repository.PassengerRepository;
-import model.service.PassengerServices;
+import model.service.PassengerService;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class PassengerServiceImpl implements PassengerServices {
+public class PassengerServiceImpl implements PassengerService {
     private final PassengerMapper passengerMapper;
     private final ReserveMapper reserveMapper;
     PassengerRepository passengerRepository;
@@ -32,15 +32,15 @@ public class PassengerServiceImpl implements PassengerServices {
 
     @Override
     public Optional<PassengerDto> update(int id, PassengerDto passenger) {
-        return Optional.of(passengerMapper.toIdDto(passengerRepository.findById(id).map(oldPassenger ->{
+        return passengerRepository.findById(id).map(oldPassenger ->{
             oldPassenger.setName(passenger.name());
             oldPassenger.setLastname(passenger.lastname());
             oldPassenger.setAddress(passenger.address());
             oldPassenger.setCellphone(passenger.cellphone());
             oldPassenger.setEmail(passenger.email());
             oldPassenger.setReserve(reserveMapper.toEntity(passenger.reserve()));
-            return passengerRepository.save(oldPassenger);
-        }).get()));
+            return passengerMapper.toIdDto(passengerRepository.save(oldPassenger));
+        });
     }
 
     @Override
