@@ -5,7 +5,7 @@ import model.dto.PassengerDto;
 import java.util.List;
 import java.util.Optional;
 
-public interface PassengerServices {
+public interface PassengerService {
     PassengerDto save(PassengerDto passenger);
     Optional<PassengerDto> getById(int id);
     Optional<PassengerDto> update(int id, PassengerDto passenger);

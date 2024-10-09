@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReserveServices {
+public interface ReserveService {
     ReserveDto save(ReserveDto reserve);
     Optional<ReserveDto> findById(int id);
     Optional<ReserveDto> update(int id, ReserveDto reserve);

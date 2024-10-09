@@ -5,7 +5,7 @@ import model.dto.AirportDto;
 import java.util.List;
 import java.util.Optional;
 
-public interface AirportServices {
+public interface AirportService {
     AirportDto save(AirportDto airport);
     Optional<AirportDto> findById(int id);
     Optional<AirportDto> update(int id, AirportDto airport);

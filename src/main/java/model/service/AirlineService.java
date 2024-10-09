@@ -5,7 +5,7 @@ import model.dto.AirlineDto;
 import java.util.List;
 import java.util.Optional;
 
-public interface AirlineServices {
+public interface AirlineService {
     AirlineDto save(AirlineDto airline);
     Optional<AirlineDto> findById(int id);
     Optional<AirlineDto> update(int id, AirlineDto airline);

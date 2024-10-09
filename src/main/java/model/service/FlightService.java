@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface FlightServices {
+public interface FlightService {
     FlightDto save(FlightDto flight);
     Optional<FlightDto> findById(int id);
     Optional<FlightDto> update(int id, FlightDto flight);
