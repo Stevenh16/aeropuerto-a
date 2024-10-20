@@ -6,8 +6,6 @@ import lombok.*;
 import java.util.Set;
 
 @Data
-@Setter
-@Getter
 @Builder
 @MappedSuperclass
 @NoArgsConstructor
