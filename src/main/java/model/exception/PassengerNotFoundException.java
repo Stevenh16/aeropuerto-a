@@ -1,8 +1,10 @@
 package model.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class PassengerNotFoundException extends RuntimeException {
     public PassengerNotFoundException() {
         this("Passenger not found");

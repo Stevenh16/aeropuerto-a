@@ -1,8 +1,10 @@
 package model.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ClientNotFoundException extends RuntimeException {
   public ClientNotFoundException() {this("Client not found");}
   public ClientNotFoundException(String message) {
