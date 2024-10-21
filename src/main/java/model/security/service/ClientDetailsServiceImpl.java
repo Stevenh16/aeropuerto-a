@@ -2,7 +2,6 @@ package model.security.service;
 
 import model.entity.Client;
 import model.repository.ClientRepository;
-import model.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
