@@ -7,6 +7,7 @@ import model.mapper.ClientMapper;
 import model.mapper.ReserveMapper;
 import model.repository.ClientRepository;
 import model.service.ClientService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Lazy))
 public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
     private final ReserveMapper reserveMapper;

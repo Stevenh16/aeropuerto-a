@@ -7,6 +7,7 @@ import model.mapper.AirportMapper;
 import model.mapper.FlightMapper;
 import model.repository.AirportRepository;
 import model.service.AirportService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Lazy))
 public class AirportServiceImpl implements AirportService {
     private AirportMapper airportMapper;
     private FlightMapper flightMapper;

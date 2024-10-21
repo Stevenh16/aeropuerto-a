@@ -7,6 +7,7 @@ import model.mapper.PassengerMapper;
 import model.mapper.ReserveMapper;
 import model.repository.PassengerRepository;
 import model.service.PassengerService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Lazy))
 public class PassengerServiceImpl implements PassengerService {
     private final PassengerMapper passengerMapper;
     private final ReserveMapper reserveMapper;

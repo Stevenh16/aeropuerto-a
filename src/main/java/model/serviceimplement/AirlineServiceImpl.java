@@ -1,12 +1,15 @@
 package model.serviceimplement;
 
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import model.dto.AirlineDto;
 import model.entity.Airline;
 import model.mapper.AirlineMapper;
 import model.mapper.FlightMapper;
 import model.repository.AirlineRepository;
 import model.service.AirlineService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Lazy))
 public class AirlineServiceImpl implements AirlineService {
     private AirlineRepository airlineRepository;
     private FlightMapper flightMapper;
@@ -36,7 +39,7 @@ public class AirlineServiceImpl implements AirlineService {
             oldAirline.setAirlineCode(airline.airlineCode());
             oldAirline.setName(airline.name());
             oldAirline.setCountryOfOrigin(airline.countryOfOrigin());
-            oldAirline.setFlights(flightMapper.toListEntity(airline.flights()));//Preguntar!!! Los Flights a asignar no tendran los mismos ids que los originales, o eso creo.
+            oldAirline.setFlights(flightMapper.toListEntity(airline.flights()));
             return airlineMapper.toIdDto(airlineRepository.save(oldAirline));
         });
     }
