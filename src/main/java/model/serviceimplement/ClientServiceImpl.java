@@ -40,8 +40,6 @@ public class ClientServiceImpl implements ClientService {
             oldClient.setEmail(client.email());
             oldClient.setCellphone(client.cellphone());
             oldClient.setReserves(reserveMapper.toListEntity(client.reserves()));
-            oldClient.setUsername(client.username());
-            oldClient.setPassword(client.password());
             return clientMapper.toIdDto(clientRepository.save(oldClient));
         });
     }

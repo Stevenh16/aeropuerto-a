@@ -40,8 +40,6 @@ public class PassengerServiceImpl implements PassengerService {
             oldPassenger.setCellphone(passenger.cellphone());
             oldPassenger.setEmail(passenger.email());
             oldPassenger.setReserve(reserveMapper.toEntity(passenger.reserve()));
-            oldPassenger.setUsername(passenger.username());
-            oldPassenger.setPassword(passenger.password());
             return passengerMapper.toIdDto(passengerRepository.save(oldPassenger));
         });
     }
