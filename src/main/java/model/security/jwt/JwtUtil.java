@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import model.security.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,16 +19,16 @@ import java.util.Date;
 public class JwtUtil {
     @Value("${app.jwt.secret}")
     private String jwtSecret;
-    @Value("${app.jwt.expirationMs")
+    @Value("${app.jwt.expirationMs}")
     private String jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.HS256)
+                .expiration(new Date((new Date()).getTime() + Long.parseLong(jwtExpirationMs)))
+                .signWith(SignatureAlgorithm.HS256,jwtSecret )
                 .compact();
     }
     public boolean validateJwtToken(String authToken)  {
@@ -45,7 +46,7 @@ public class JwtUtil {
     }
 
     public String getUserNameFromJwtToken(String authToken) {
-        return Jwts.parser().setSigningKey(key()).build().parseClaimsJws(authToken).getPayload().getSubject();
+        return Jwts.parser().setSigningKey(key()).build().parseClaimsJws(authToken).getBody().getSubject();
     }
 
     private Key key(){

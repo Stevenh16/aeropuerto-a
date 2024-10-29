@@ -3,7 +3,6 @@ package model.security;
 import lombok.AllArgsConstructor;
 import model.security.jwt.AuthTokenFilter;
 import model.security.jwt.exception.AuthEntryPointJwt;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,14 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor
 public class WebSecurityConfig {
-    private UserDetailsService userDetailsService;
     private AuthEntryPointJwt unauthorizedHandler;
-    @Bean
-    public AuthTokenFilter authTokenFilter(){
-        return new AuthTokenFilter();
-    }
+    private UserDetailsService userDetailsService;
+    private AuthTokenFilter authTokenFilter;
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -53,7 +49,7 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 );
         http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
