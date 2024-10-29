@@ -57,7 +57,7 @@ public class AuthenticationController{
     }
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest sRequest){
-        User user = new User(sRequest.hashCode(), sRequest.username(), passwordEncoder.encode(sRequest.password()),sRequest.email(),roleMapper.toRoles(sRequest.roles()));
+        User user = new User(null, sRequest.username(), passwordEncoder.encode(sRequest.password()),sRequest.email(),roleMapper.toRoles(sRequest.roles()));
         User newUser = userRepository.save(user);
         return ResponseEntity.ok(newUser);
     }
