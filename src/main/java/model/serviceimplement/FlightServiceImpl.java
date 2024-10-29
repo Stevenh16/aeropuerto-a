@@ -44,8 +44,8 @@ public class FlightServiceImpl implements FlightService {
             oldFlight.setReserves(reserveMapper.toListEntity(flight.reserves()));
             oldFlight.setDuration(flight.duration());
             oldFlight.setCapacity(flight.capacity());
-            oldFlight.setAirport_destination(airportMapper.toEntity(flight.airportDestination()));
-            oldFlight.setAirport_origin(airportMapper.toEntity(flight.airportOrigin()));
+            oldFlight.setAirportDestination(airportMapper.toEntity(flight.airportDestination()));
+            oldFlight.setAirportOrigin(airportMapper.toEntity(flight.airportOrigin()));
             oldFlight.setExitDate(flight.exitDate());
             return flightMapper.toIdDto(flightRepository.save(oldFlight));
         });
