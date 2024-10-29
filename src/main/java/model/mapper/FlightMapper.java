@@ -14,43 +14,43 @@ import java.util.List;
 public interface FlightMapper {
     @Named("complete")
     @Mapping(source = "flight.airline",target = "airline", qualifiedByName = "completeWithoutFlight")
-    @Mapping(source = "flight.airport_origin", target = "airportOrigin", qualifiedByName = "completeWithoutFlight")
-    @Mapping(source = "flight.airport_destination", target = "airportDestination", qualifiedByName = "completeWithoutFlight")
+    @Mapping(source = "flight.airportOrigin", target = "airportOrigin", qualifiedByName = "completeWithoutFlight")
+    @Mapping(source = "flight.airportDestination", target = "airportDestination", qualifiedByName = "completeWithoutFlight")
     @Mapping(source = "flight.reserves", target = "reserves", qualifiedByName = "listCompleteWithoutEntities")
     FlightDto toIdDto(Flight flight);
 
     @Named("listComplete")
     @Mapping(source = "flight.airline",target = "airline", qualifiedByName = "completeWithoutFlight")
-    @Mapping(source = "flight.airport_origin", target = "airportOrigin", qualifiedByName = "completeWithoutFlight")
-    @Mapping(source = "flight.airport_destination", target = "airportDestination", qualifiedByName = "completeWithoutFlight")
+    @Mapping(source = "flight.airportOrigin", target = "airportOrigin", qualifiedByName = "completeWithoutFlight")
+    @Mapping(source = "flight.airportDestination", target = "airportDestination", qualifiedByName = "completeWithoutFlight")
     @Mapping(source = "flight.reserves", target = "reserves", qualifiedByName = "listCompleteWithoutEntities")
     List<FlightDto> toListIdDto(List<Flight> flights);
 
     @Mapping(source = "flightDto.airline",target = "airline", qualifiedByName = "entityWithoutFlight")
-    @Mapping(source = "flightDto.airportOrigin", target = "airport_origin", qualifiedByName = "entityWithoutFlight")
-    @Mapping(source = "flightDto.airportDestination", target = "airport_destination", qualifiedByName = "entityWithoutFlight")
+    @Mapping(source = "flightDto.airportOrigin", target = "airportOrigin", qualifiedByName = "entityWithoutFlight")
+    @Mapping(source = "flightDto.airportDestination", target = "airportDestination", qualifiedByName = "entityWithoutFlight")
     @Mapping(source = "flightDto.reserves", target = "reserves", qualifiedByName = "listEntityWithoutDtos")
     Flight toEntity(FlightDto flightDto);
 
     @Mapping(source = "flightDto.airline",target = "airline", qualifiedByName = "entityWithoutFlight")
-    @Mapping(source = "flightDto.airportOrigin", target = "airport_origin", qualifiedByName = "entityWithoutFlight")
-    @Mapping(source = "flightDto.airportDestination", target = "airport_destination", qualifiedByName = "entityWithoutFlight")
+    @Mapping(source = "flightDto.airportOrigin", target = "airportOrigin", qualifiedByName = "entityWithoutFlight")
+    @Mapping(source = "flightDto.airportDestination", target = "airportDestination", qualifiedByName = "entityWithoutFlight")
     @Mapping(source = "flightDto.reserves", target = "reserves", qualifiedByName = "listEntityWithoutDtos")
     List<Flight> toListEntity(List<FlightDto> flightDtos);
 
     @Named("withoutId")
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "flight.airline",target = "airline", qualifiedByName = "withoutIdWithoutFlight")
-    @Mapping(source = "flight.airport_origin", target = "airportOrigin", qualifiedByName = "withoutIdWithoutFlight")
-    @Mapping(source = "flight.airport_destination", target = "airportDestination", qualifiedByName = "withoutIdWithoutFlight")
+    @Mapping(source = "flight.airportOrigin", target = "airportOrigin", qualifiedByName = "withoutIdWithoutFlight")
+    @Mapping(source = "flight.airportDestination", target = "airportDestination", qualifiedByName = "withoutIdWithoutFlight")
     @Mapping(source = "flight.reserves", target = "reserves", qualifiedByName = "listWithoutIdWithoutEntities")
     FlightDto toDto(Flight flight);
 
     @Named("listWithoutId")
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "flight.airline",target = "airline", qualifiedByName = "withoutIdWithoutFlight")
-    @Mapping(source = "flight.airport_origin", target = "airportOrigin", qualifiedByName = "withoutIdWithoutFlight")
-    @Mapping(source = "flight.airport_destination", target = "airportDestination", qualifiedByName = "withoutIdWithoutFlight")
+    @Mapping(source = "flight.airportOrigin", target = "airportOrigin", qualifiedByName = "withoutIdWithoutFlight")
+    @Mapping(source = "flight.airportDestination", target = "airportDestination", qualifiedByName = "withoutIdWithoutFlight")
     @Mapping(source = "flight.reserves", target = "reserves", qualifiedByName = "listWithoutIdWithoutEntities")
     List<FlightDto> toListDto(List<Flight> flights);
 
@@ -86,8 +86,8 @@ public interface FlightMapper {
 
     @Named("EntityWithoutDtos")
     @Mapping(target = "airline", ignore = true)
-    @Mapping(target = "airport_origin", ignore = true)
-    @Mapping(target = "airport_destination", ignore = true)
+    @Mapping(target = "airportOrigin", ignore = true)
+    @Mapping(target = "airportDestination", ignore = true)
     @Mapping(target = "reserves", ignore = true)
     Flight toEntityWithoutDtos(FlightDto flightDto);
 
