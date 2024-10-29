@@ -22,8 +22,8 @@ public class Airport {
     private String city;
     @Column(name="country")
     private String country;
-    @OneToMany(mappedBy = "airport_origin", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "airportOrigin", fetch = FetchType.LAZY)
     private List<Flight> flightsOrigins;
-    @OneToMany(mappedBy = "airport_destination", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "airportDestination", fetch = FetchType.LAZY)
     private List<Flight> flightsDestinations;
 }

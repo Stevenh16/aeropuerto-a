@@ -26,10 +26,10 @@ public class Flight {
     private Airline airline;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "airport_origin_id")
-    private Airport airport_origin;
+    private Airport airportOrigin;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "airport_destination_id")
-    private Airport airport_destination;
+    private Airport airportDestination;
     @Column(name="exit_date")
     private LocalDate exitDate;
     @Column(name="exit_time")
