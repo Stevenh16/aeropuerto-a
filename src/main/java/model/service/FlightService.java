@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface FlightService {
     FlightDto save(FlightDto flight);
-    Optional<FlightDto> findById(int id);
-    Optional<FlightDto> update(int id, FlightDto flight);
+    Optional<FlightDto> findById(Long id);
+    Optional<FlightDto> update(Long id, FlightDto flight);
     List<FlightDto> findAll();
     List<FlightDto> findByDate(LocalDate date);
-    void deleteById(int id);
+    void deleteById(Long id);
 }

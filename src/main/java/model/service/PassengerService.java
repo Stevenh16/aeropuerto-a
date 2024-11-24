@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface PassengerService {
     PassengerDto save(PassengerDto passenger);
-    Optional<PassengerDto> getById(int id);
-    Optional<PassengerDto> update(int id, PassengerDto passenger);
+    Optional<PassengerDto> getById(Long id);
+    Optional<PassengerDto> update(Long id, PassengerDto passenger);
     List<PassengerDto> findAll();
     List<PassengerDto> findByName(String name);
-    void deleteById(int id);
+    void deleteById(Long id);
 }

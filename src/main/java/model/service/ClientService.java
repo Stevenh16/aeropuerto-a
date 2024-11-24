@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface ClientService {
     ClientDto save(ClientDto client);
-    Optional<ClientDto> findById(int id);
-    Optional<ClientDto> update(int id, ClientDto client);
+    Optional<ClientDto> findById(Long id);
+    Optional<ClientDto> update(Long id, ClientDto client);
     List<ClientDto> findAll();
     List<ClientDto> findByName(String name);
-    void deleteById(int id);
+    void deleteById(Long id);
 }
