@@ -22,7 +22,7 @@ public class AirlineController {
         return ResponseEntity.ok(airlineService.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<AirlineDto> getAirlineById(@PathVariable("id") int id) {
+    public ResponseEntity<AirlineDto> getAirlineById(@PathVariable("id") Long id) {
         return airlineService.findById(id)
                 .map( a-> ResponseEntity.ok().body(a))
                 .orElse(ResponseEntity.notFound().build());
@@ -32,12 +32,12 @@ public class AirlineController {
         return createNewAirline(airline);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<AirlineDto> updateAirline(@PathVariable int id, @RequestBody AirlineDto airline){
+    public ResponseEntity<AirlineDto> updateAirline(@PathVariable Long id, @RequestBody AirlineDto airline){
         Optional<AirlineDto> airlineUpdated = airlineService.update(id, airline);
         return airlineUpdated.map(ResponseEntity::ok).orElseGet(() -> createNewAirline(airline));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<AirlineDto> deleteAirline(@PathVariable int id) {
+    public ResponseEntity<AirlineDto> deleteAirline(@PathVariable Long id) {
         airlineService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

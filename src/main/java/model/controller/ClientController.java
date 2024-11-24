@@ -24,7 +24,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientDto> getClientById(@PathVariable int id) {
+    public ResponseEntity<ClientDto> getClientById(@PathVariable Long id) {
         return clientService.findById(id)
                 .map( c -> ResponseEntity.ok().body(c))
                 .orElse(ResponseEntity.notFound().build());
@@ -36,7 +36,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientDto> updateClient(@PathVariable int id, @RequestBody ClientDto client) {
+    public ResponseEntity<ClientDto> updateClient(@PathVariable Long id, @RequestBody ClientDto client) {
         Optional<ClientDto> clientUpdated = clientService.update(id, client);
         return clientUpdated
                 .map(ResponseEntity::ok)
@@ -44,7 +44,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClient(@PathVariable int id) {
+    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
         clientService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

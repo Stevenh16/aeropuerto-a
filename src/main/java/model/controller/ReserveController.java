@@ -22,7 +22,7 @@ public class ReserveController {
         return ResponseEntity.ok(reserveService.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ReserveDto> getReserveById(@PathVariable("id") int id) {
+    public ResponseEntity<ReserveDto> getReserveById(@PathVariable("id") Long id) {
         return reserveService.findById(id)
                 .map(r->ResponseEntity.ok().body(r))
                 .orElse(ResponseEntity.notFound().build());
@@ -32,7 +32,7 @@ public class ReserveController {
         return createNewReserve(reserve);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ReserveDto> updateReserve(@PathVariable int id, @RequestBody ReserveDto reserve) {
+    public ResponseEntity<ReserveDto> updateReserve(@PathVariable Long id, @RequestBody ReserveDto reserve) {
         Optional<ReserveDto> reserveUpdate = reserveService.update(id,reserve);
         return reserveUpdate
                 .map(ResponseEntity::ok)
