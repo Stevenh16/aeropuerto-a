@@ -15,7 +15,7 @@ import java.util.List;
 public class Reserve {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Column(name="date")
     private LocalDate date;
     @Column(name="numbers_of_passengers")
