@@ -11,53 +11,27 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = ReserveMapper.class)
 public interface PassengerMapper {
     @Named("complete")
-    @Mapping(source = "passenger.reserve", target = "reserve", qualifiedByName = "completeWithoutEntities")
+    @Mapping(source = "passenger.reserve.id", target = "reserve")
     PassengerDto toIdDto(Passenger passenger);
 
     @Named("listComplete")
-    @Mapping(source = "passenger.reserve", target = "reserve", qualifiedByName = "completeWithoutEntities")
+    @Mapping(source = "passenger.reserve.id", target = "reserve", qualifiedByName = "mapToReserveIdPassenger")
     List<PassengerDto> toListIdDto(List<Passenger> passengers);
 
-    @Mapping(source = "passengerDto.reserve", target = "reserve", qualifiedByName = "entityWithoutDtos")
+    @Mapping(source = "passengerDto.reserve", target = "reserve")
     Passenger toEntity(PassengerDto passengerDto);
 
 
-    @Mapping(source = "passengerDto.reserve", target = "reserve", qualifiedByName = "entityWithoutDtos")
+    @Mapping(source = "passengerDto.reserve", target = "reserve")
     List<Passenger> toListEntity(List<PassengerDto> passengerDto);
 
     @Named("withoutId")
     @Mapping(target="id",ignore = true)
-    @Mapping(source = "passenger.reserve", target = "reserve", qualifiedByName = "withoutIdWithoutEntities")
+    @Mapping(source = "passenger.reserve.id", target = "reserve")
     PassengerDto toDto(Passenger passenger);
 
     @Named("listWithoutId")
     @Mapping(target="id",ignore = true)
-    @Mapping(source = "passenger.reserve", target = "reserve", qualifiedByName = "withoutIdWithoutEntities")
+    @Mapping(source = "passenger.reserve.id", target = "reserve")
     List<PassengerDto> toListDto(List<Passenger> passengers);
-
-    @Named("completeWithoutReserve")
-    @Mapping(target = "reserve", ignore = true)
-    PassengerDto toIdDtoWithoutReserve(Passenger passenger);
-
-    @Named("listCompleteWithoutReserve")
-    @Mapping(target = "reserve", ignore = true)
-    List<PassengerDto> toListIdDtoWithoutReserve(List<Passenger> passengers);
-
-    @Named("entityWithoutReserve")
-    @Mapping(target = "reserve", ignore = true)
-    Passenger toEntityWithoutReserve(Passenger passenger);
-
-    @Named("listEntityWithoutReserve")
-    @Mapping(target = "reserve", ignore = true)
-    List<Passenger> toListEntityWithoutReserve(List<Passenger> passengers);
-
-    @Named("withoutIdWithoutReserve")
-    @Mapping(target = "reserve", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    PassengerDto toDtoWithoutReserve(Passenger passenger);
-
-    @Named("listWithoutIdWithoutReserve")
-    @Mapping(target = "reserve", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    List<PassengerDto> toListDtoWithoutReserve(List<Passenger> passengers);
 }
