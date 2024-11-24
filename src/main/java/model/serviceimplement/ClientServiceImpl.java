@@ -27,12 +27,12 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<ClientDto> findById(int id) {
+    public Optional<ClientDto> findById(Long id) {
         return clientRepository.findById(id).map(clientMapper::toIdDto);
     }
 
     @Override
-    public Optional<ClientDto> update(int id, ClientDto client) {
+    public Optional<ClientDto> update(Long id, ClientDto client) {
         return clientRepository.findById(id).map(oldClient -> {
             oldClient.setAddress(client.address());
             oldClient.setName(client.name());
@@ -58,7 +58,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         clientRepository.deleteById(id);
     }
 }

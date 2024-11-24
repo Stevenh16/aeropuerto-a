@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import model.dto.PassengerDto;
 import model.entity.Passenger;
 import model.mapper.PassengerMapper;
-import model.mapper.ReserveMapper;
 import model.repository.PassengerRepository;
+import model.repository.ReserveRepository;
 import model.service.PassengerService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @AllArgsConstructor(onConstructor = @__(@Lazy))
 public class PassengerServiceImpl implements PassengerService {
     private final PassengerMapper passengerMapper;
-    private final ReserveMapper reserveMapper;
+    private final ReserveRepository reserveRepository;
     PassengerRepository passengerRepository;
 
     @Override
@@ -27,19 +27,19 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public Optional<PassengerDto> getById(int id) {
+    public Optional<PassengerDto> getById(Long id) {
         return passengerRepository.findById(id).map(passengerMapper::toIdDto);
     }
 
     @Override
-    public Optional<PassengerDto> update(int id, PassengerDto passenger) {
+    public Optional<PassengerDto> update(Long id, PassengerDto passenger) {
         return passengerRepository.findById(id).map(oldPassenger ->{
             oldPassenger.setName(passenger.name());
             oldPassenger.setLastname(passenger.lastname());
             oldPassenger.setAddress(passenger.address());
             oldPassenger.setCellphone(passenger.cellphone());
             oldPassenger.setEmail(passenger.email());
-            oldPassenger.setReserve(reserveMapper.toEntity(passenger.reserve()));
+            oldPassenger.setReserve(reserveRepository.findById(passenger.reserve()).get());
             return passengerMapper.toIdDto(passengerRepository.save(oldPassenger));
         });
     }
@@ -58,7 +58,7 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         passengerRepository.deleteById(id);
     }
 }

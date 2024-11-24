@@ -1,8 +1,5 @@
 package model.serviceimplement;
-
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import model.dto.AirlineDto;
 import model.entity.Airline;
 import model.mapper.AirlineMapper;
@@ -29,12 +26,12 @@ public class AirlineServiceImpl implements AirlineService {
     }
 
     @Override
-    public Optional<AirlineDto> findById(int id) {
+    public Optional<AirlineDto> findById(Long id) {
         return airlineRepository.findById(id).map(airlineMapper::toIdDto);
     }
 
     @Override
-    public Optional<AirlineDto> update(int id, AirlineDto airline) {
+    public Optional<AirlineDto> update(Long id, AirlineDto airline) {
         return airlineRepository.findById(id).map(oldAirline -> {
             oldAirline.setAirlineCode(airline.airlineCode());
             oldAirline.setName(airline.name());
@@ -58,7 +55,7 @@ public class AirlineServiceImpl implements AirlineService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         airlineRepository.deleteById(id);
     }
 

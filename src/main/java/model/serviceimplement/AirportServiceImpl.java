@@ -27,13 +27,13 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public Optional<AirportDto> findById(int id) {
-        return airportRepository.findById((long) id).map(airportMapper::toIdDto);
+    public Optional<AirportDto> findById(Long id) {
+        return airportRepository.findById(id).map(airportMapper::toIdDto);
     }
 
     @Override
-    public Optional<AirportDto> update(int id, AirportDto airport) {
-        return airportRepository.findById((long) id).map(oldAirport -> {
+    public Optional<AirportDto> update(Long id, AirportDto airport) {
+        return airportRepository.findById(id).map(oldAirport -> {
             oldAirport.setCity(airport.city());
             oldAirport.setCountry(airport.country());
             oldAirport.setName(airport.name());
@@ -57,8 +57,8 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public void deleteById(int id) {
-        airportRepository.deleteById((long)id);
+    public void deleteById(Long id) {
+        airportRepository.deleteById(id);
     }
 
 }

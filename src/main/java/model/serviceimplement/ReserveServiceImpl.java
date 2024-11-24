@@ -33,14 +33,14 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public Optional<ReserveDto> findById(int id) {
+    public Optional<ReserveDto> findById(Long id) {
         return reserveRepository.findById(id).map(reserveMapper::toDto);
     }
 
     @Override
-    public Optional<ReserveDto> update(int id, ReserveDto reserve) {
+    public Optional<ReserveDto> update(Long id, ReserveDto reserve) {
         return reserveRepository.findById(id).map(oldReserve -> {
-            oldReserve.setClient(clientMapper.toEntity(reserve.client()));
+            oldReserve.setClient(reserveMapper.mapToClient(reserve.client()));
             oldReserve.setDate(reserve.date());
             oldReserve.setFlights(flightMapper.toListEntity(reserve.flights()));
             oldReserve.setPassengers(passengerMapper.toListEntity(reserve.passengers()));
@@ -71,7 +71,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         reserveRepository.deleteById(id);
     }
 
